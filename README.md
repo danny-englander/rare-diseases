@@ -26,8 +26,8 @@ ORPHAcode:
 |---|---|
 | `en_product3_<id>.xml` (classifications) | Real disease names + ORPHAcodes, grouped by body-system classification |
 | `en_product1.json` (alignments) | Synonyms |
-| `en_product9_ages.xml` (natural history) | Type of inheritance (can be more than one per disease) |
-| `en_product9_prev.xml` (epidemiology) | Prevalence estimates |
+| `en_product9_ages.xml` (natural history) | Type of inheritance + average age of onset (both live in this one file; parsed together) |
+| `en_product9_prev.xml` (epidemiology) | Prevalence estimates + rarity class |
 | `en_product4.xml` (phenotypes) | HPO-coded clinical signs, filtered to "Very frequent" / "Frequent" / "Occasional" |
 
 **One honest gap:** Orphadata's free bulk products don't include prose
@@ -77,14 +77,6 @@ steps" below for pulling everything).
 (their FAQ says to contact them), but the bulk XML/JSON files used here are
 freely downloadable under CC BY 4.0 with a plain HTTP GET.
 
-## Licensing
-
-- **Code** (everything except the generated dataset) is MIT. See `LICENSE`.
-- **Data** in `src/data/diseases.generated.json` is derived from Orphadata
-  Science and remains [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-  Attribution, the data version, and a note that this project modifies a
-  subset of the source files are in `NOTICE` and in the site footer.
-
 ## The prototype says so, on the page
 
 Because the dataset is a sample (920 of 10,101 real diseases), the search
@@ -94,6 +86,66 @@ reflects the sample, not whether the disease is real. This matters more
 here than on a typical demo: someone searching for a health condition and
 getting zero results could otherwise reasonably read that as "this isn't
 real," which isn't a message worth risking even in a prototype.
+
+## Five facets, not two
+
+Body system and inheritance pattern were the original two. Two more were
+added later, both from data that was already being pulled but sitting
+unused:
+
+- **Typical age of onset** — Antenatal / Neonatal / Infancy / Childhood /
+  Adolescent / Adult / Elderly / All ages, from the same `product9_ages.xml`
+  file inheritance already comes from. Ordered chronologically, not
+  alphabetically — `orderByReference()` in `diseases.ts` handles this
+  generically for any facet that needs a meaningful (non-alphabetical) order.
+- **Rarity class** — Orphanet's own prevalence-class buckets (`>1/1,000`
+  down to `<1/1,000,000`), ordered most-common-to-rarest, same mechanism.
+
+Both are wired the same way the original two are: multi-value Pagefind
+filter tags on the detail page (`data-pagefind-filter="AgeOfOnset:..."` /
+`"Rarity:..."`), generic checkbox handling in `index.astro` (no per-facet
+JS needed — `getActiveFilters()` reads any `[data-facet-group]` element),
+and the same dev-mode fallback filtering for `npm run dev`.
+
+A fifth candidate — **associated gene** — was considered but not built.
+The data exists (`en_product6.xml`, real gene symbols like `KIF7` with
+association type), but it's a poor fit for a checkbox facet since most
+diseases map to just one or two genes; it'd be a search/display field
+rather than a filter.
+
+## Pagination: "Show more," not infinite scroll or numbered pages
+
+With the dataset capped in the hundreds per facet, hundreds of results can
+come back from a single search. Infinite scroll was considered and
+rejected — it loses any sense of how much more there is, breaks the
+footer, and loses scroll position on back-navigation, all of which matter
+more on a search tool than a passive feed. Numbered pages were also
+rejected — clicking to page 2 would fight the instant, live-updating feel
+of everything else on the page.
+
+Instead: 20 results render at a time, with a "Show 20 more (N left)"
+button underneath that extends the visible slice without re-running the
+search. `visibleCount` resets to 20 whenever the query or any facet
+changes — the logic lives in `renderPage()` in `index.astro`, separated
+from `runSearch()` (which computes the full match set once per
+query/facet change; `renderPage()` just decides how much of it to show).
+
+## Attribution (CC BY 4.0)
+
+Orphadata's data is licensed CC BY 4.0, which requires attribution, not
+just a mention in this README. The site's footer (in `Layout.astro`, so
+it's on every page) carries Orphadata's own citation format, with the
+release date pulled dynamically from the source XML rather than
+hardcoded:
+
+> Orphadata: Free access data from Orphanet. https://www.orphadata.com.
+> Data release 2026-06-23. Licensed CC BY 4.0 — this site's code is a
+> separate, independently built interface over that data, not an Orphanet
+> product.
+
+If you fork this and publish it, add a `LICENSE` file for the *code*
+(MIT is the common default) — that's a separate concern from the data's
+CC BY 4.0 terms, and worth being explicit that they're different.
 
 ## Running it
 
@@ -121,13 +173,23 @@ A custom daisyUI theme (not a default preset) — warm paper background,
 muted teal primary, Source Serif 4 for headings + Inter for UI. See
 `src/styles/global.css` for the token values.
 
-## Known gotcha already fixed
+## Known gotchas already fixed
 
-Astro/Vite's bundler broke a dynamic `import("/pagefind/pagefind.js")`
-call with a `__VITE_PRELOAD__` reference error. Fixed by marking that
-`<script>` `is:inline` in `index.astro`, which tells Astro to leave it
-completely unprocessed (plain JS, no TypeScript in that block as a
-result). If you add more logic there, keep it framework-free JS.
+**Dynamic Pagefind import breaks under Astro/Vite's bundler.** A dynamic
+`import("/pagefind/pagefind.js")` call failed with a `__VITE_PRELOAD__`
+reference error. Fixed by marking that `<script>` `is:inline` in
+`index.astro`, which tells Astro to leave it completely unprocessed
+(plain JS, no TypeScript in that block as a result). If you add more
+logic there, keep it framework-free JS.
+
+**Whitespace between text and an inline element/expression can silently
+collapse to nothing** when they're split across a line break in an Astro
+template — hit this twice (the "Orphadata's{ORPHADATA_TOTAL}" disclaimer,
+then the footer's two links). Both times the fix was the same: keep text
+and the adjacent `{expression}` or `<a>` on the same source line rather
+than relying on the newline-to-space collapsing every other whitespace
+run gets. Worth checking for visually (not just in the template source)
+any time inline text sits next to a tag or expression here.
 
 ## Next steps to consider
 
@@ -145,3 +207,6 @@ result). If you add more logic there, keep it framework-free JS.
   free approach, but with real fuzzy/Levenshtein matching
 - Collapse the facet sidebar into a `<details>`/drawer on mobile — right
   now it's always expanded, which pushes results down on small screens
+- Cite Orphadata per their citation guidelines if this goes further
+  ("Orphadata: Free access data from Orphanet. © INSERM 1999. Available
+  on https://www.orphadata.com. Data version [XML data version].")
