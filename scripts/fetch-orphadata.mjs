@@ -205,22 +205,31 @@ async function loadSynonyms() {
   return map;
 }
 
-// --- product9_ages.xml: type of inheritance, keyed by OrphaCode ---
+// --- product9_ages.xml ("natural history"): type of inheritance AND
+// average age of onset both live in this one file — parse it once and
+// return both maps rather than reading the 6.7MB file twice.
 
-async function loadInheritance() {
+async function loadNaturalHistory() {
   const filePath = await downloadToCache(`${BASE}/xml/en_product9_ages.xml`, "en_product9_ages.xml");
   const xml = await readFile(filePath, "utf-8");
   const data = parser.parse(xml);
   const disorders = data.JDBOR.DisorderList.Disorder;
 
-  const map = new Map();
+  const inheritanceByCode = new Map();
+  const ageOfOnsetByCode = new Map();
   for (const d of disorders) {
+    const code = String(d.OrphaCode);
     const types = (d.TypeOfInheritanceList?.TypeOfInheritance ?? []).map(
       (t) => t.Name?.["#text"] ?? t.Name
     );
-    if (types.length > 0) map.set(String(d.OrphaCode), types);
+    if (types.length > 0) inheritanceByCode.set(code, types);
+
+    const onsets = (d.AverageAgeOfOnsetList?.AverageAgeOfOnset ?? []).map(
+      (a) => a.Name?.["#text"] ?? a.Name
+    );
+    if (onsets.length > 0) ageOfOnsetByCode.set(code, onsets);
   }
-  return map;
+  return { inheritanceByCode, ageOfOnsetByCode };
 }
 
 // --- product9_prev.xml: prevalence, keyed by OrphaCode ---
@@ -231,7 +240,8 @@ async function loadPrevalence() {
   const data = parser.parse(xml);
   const disorders = data.JDBOR.DisorderList.Disorder;
 
-  const map = new Map();
+  const prevalenceByCode = new Map();
+  const rarityByCode = new Map();
   for (const d of disorders) {
     const entries = d.PrevalenceList?.Prevalence ?? [];
     // Prefer a validated, worldwide, class-based estimate; fall back to
@@ -248,10 +258,12 @@ async function loadPrevalence() {
       const p = ranked[0];
       const cls = p.PrevalenceClass.Name?.["#text"] ?? p.PrevalenceClass.Name;
       const geo = p.PrevalenceGeographic?.Name?.["#text"] ?? p.PrevalenceGeographic?.Name;
-      map.set(String(d.OrphaCode), geo ? `${cls} (${geo})` : cls);
+      const code = String(d.OrphaCode);
+      prevalenceByCode.set(code, geo ? `${cls} (${geo})` : cls);
+      rarityByCode.set(code, cls);
     }
   }
-  return map;
+  return { prevalenceByCode, rarityByCode };
 }
 
 // --- product4.xml: HPO-coded clinical signs, keyed by OrphaCode ---
@@ -303,6 +315,17 @@ function buildNote(system, code) {
   return `ORPHA:${code} is classified under "${system}" in the Orphanet nomenclature.`;
 }
 
+// Pulls the JDBOR release date from one of the source files, for the CC
+// BY 4.0 attribution shown on the site (see README's "Attribution" section
+// and the footer in Layout.astro). All product files in a given Orphadata
+// release share the same date, so any one of them is representative.
+async function getDataVersion() {
+  const filePath = path.join(CACHE_DIR, "en_product9_prev.xml");
+  const head = (await readFile(filePath, "utf-8")).slice(0, 300);
+  const match = head.match(/date="([^"]+)"/);
+  return match ? match[1].split(" ")[0] : "unknown";
+}
+
 async function main() {
   console.log("Fetching classification files...");
   const classificationResults = await Promise.all(CLASSIFICATIONS.map(loadClassification));
@@ -310,11 +333,11 @@ async function main() {
   console.log("Fetching synonyms (product1)...");
   const synonymsByCode = await loadSynonyms();
 
-  console.log("Fetching inheritance (product9_ages)...");
-  const inheritanceByCode = await loadInheritance();
+  console.log("Fetching inheritance + age of onset (product9_ages)...");
+  const { inheritanceByCode, ageOfOnsetByCode } = await loadNaturalHistory();
 
-  console.log("Fetching prevalence (product9_prev)...");
-  const prevalenceByCode = await loadPrevalence();
+  console.log("Fetching prevalence + rarity (product9_prev)...");
+  const { prevalenceByCode, rarityByCode } = await loadPrevalence();
 
   // De-duplicate by OrphaCode across classifications (a disease can be
   // cross-listed in more than one), keeping the first assignment.
@@ -338,6 +361,8 @@ async function main() {
   const neededCodes = new Set(merged.map((d) => d.code));
   const symptomsByCode = await loadSymptoms(neededCodes);
 
+  const dataVersion = await getDataVersion();
+
   const diseases = merged.map(({ code, name, system, slug }) => ({
     slug,
     name,
@@ -345,14 +370,18 @@ async function main() {
     orphaCode: `ORPHA:${code}`,
     system,
     inheritance: inheritanceByCode.get(code) ?? ["Not documented in Orphadata"],
+    ageOfOnset: ageOfOnsetByCode.get(code) ?? ["Not documented in Orphadata"],
     prevalence: prevalenceByCode.get(code) ?? "Not documented in Orphadata",
+    rarity: rarityByCode.get(code) ?? "Not documented in Orphadata",
     note: buildNote(system, code),
     symptoms: symptomsByCode.get(code) ?? [],
   }));
 
+  const output = { dataVersion, diseases };
+
   await mkdir(path.dirname(OUT_FILE), { recursive: true });
-  await writeFile(OUT_FILE, JSON.stringify(diseases, null, 2));
-  console.log(`\nWrote ${diseases.length} diseases to ${path.relative(ROOT, OUT_FILE)}`);
+  await writeFile(OUT_FILE, JSON.stringify(output, null, 2));
+  console.log(`\nWrote ${diseases.length} diseases (Orphadata release ${dataVersion}) to ${path.relative(ROOT, OUT_FILE)}`);
 }
 
 main().catch((err) => {
