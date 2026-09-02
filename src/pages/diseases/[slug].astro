@@ -53,10 +53,33 @@ const { disease } = Astro.props;
             }
           </dd>
         </div>
-        <div class="sm:col-span-2">
+        <div>
+          <dt class="text-xs text-base-content/60">Typical age of onset</dt>
+          <dd class="mt-1" data-pagefind-meta={`ageOfOnset:${disease.ageOfOnset.join(", ")}`}>
+            {
+              disease.ageOfOnset.map((onset, i) => (
+                <span data-pagefind-filter={`AgeOfOnset:${onset}`}>
+                  {onset}
+                  {i < disease.ageOfOnset.length - 1 ? ", " : ""}
+                </span>
+              ))
+            }
+          </dd>
+        </div>
+        <div>
           <dt class="text-xs text-base-content/60">Estimated prevalence</dt>
           <dd class="mt-1" data-pagefind-meta={`prevalence:${disease.prevalence}`}>
             {disease.prevalence}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-xs text-base-content/60">Rarity class</dt>
+          <dd
+            class="mt-1"
+            data-pagefind-filter={`Rarity:${disease.rarity}`}
+            data-pagefind-meta={`rarity:${disease.rarity}`}
+          >
+            {disease.rarity}
           </dd>
         </div>
       </dl>
