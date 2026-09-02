@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
-import { diseases, systems, inheritancePatterns } from "../data/diseases";
+import { diseases, systems, inheritancePatterns, ageOfOnsetOptions, rarityOptions } from "../data/diseases";
 
 // Orphadata's July 2026 release (en_product7.xml, "linearisation") lists
 // 10,101 total rare diseases — see README for how the sample here relates
@@ -94,6 +94,60 @@ const ORPHADATA_TOTAL = 10_101;
             }
           </div>
         </fieldset>
+
+        <fieldset>
+          <legend class="text-sm font-medium text-base-content/60">Typical age of onset</legend>
+          <div class="mt-3 space-y-2">
+            {
+              ageOfOnsetOptions.map((onset) => (
+                <label class="flex cursor-pointer items-center justify-between gap-2 text-sm">
+                  <span class="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      class="checkbox checkbox-sm"
+                      data-facet-group="AgeOfOnset"
+                      data-facet-value={onset}
+                    />
+                    {onset}
+                  </span>
+                  <span
+                    class="text-xs text-base-content/50"
+                    data-count-for={`AgeOfOnset:${onset}`}
+                  >
+                    ({diseases.filter((d) => d.ageOfOnset.includes(onset)).length})
+                  </span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend class="text-sm font-medium text-base-content/60">Rarity</legend>
+          <div class="mt-3 space-y-2">
+            {
+              rarityOptions.map((rarity) => (
+                <label class="flex cursor-pointer items-center justify-between gap-2 text-sm">
+                  <span class="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      class="checkbox checkbox-sm"
+                      data-facet-group="Rarity"
+                      data-facet-value={rarity}
+                    />
+                    {rarity}
+                  </span>
+                  <span
+                    class="text-xs text-base-content/50"
+                    data-count-for={`Rarity:${rarity}`}
+                  >
+                    ({diseases.filter((d) => d.rarity === rarity).length})
+                  </span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
       </aside>
 
       <div>
@@ -102,7 +156,7 @@ const ORPHADATA_TOTAL = 10_101;
         </p>
         <ul id="results-list" class="mt-2 divide-y divide-base-300">
           {
-            diseases.map((d) => (
+            diseases.slice(0, 20).map((d) => (
               <li class="py-4">
                 <a href={`/diseases/${d.slug}/`} class="font-display text-lg font-medium hover:text-primary">
                   {d.name}
@@ -117,6 +171,7 @@ const ORPHADATA_TOTAL = 10_101;
             ))
           }
         </ul>
+        <div id="show-more-container" class="mt-4"></div>
       </div>
     </div>
   </main>
@@ -125,15 +180,20 @@ const ORPHADATA_TOTAL = 10_101;
 
   <script is:inline>
     (function () {
+      var PAGE_SIZE = 20;
+
       var searchInput = document.getElementById("search-input");
       var resultsList = document.getElementById("results-list");
       var resultCount = document.getElementById("result-count");
+      var showMoreContainer = document.getElementById("show-more-container");
       var checkboxes = Array.prototype.slice.call(
         document.querySelectorAll("[data-facet-group]")
       );
 
       var pagefind = null;
       var fallbackData = null;
+      var currentItems = [];
+      var visibleCount = PAGE_SIZE;
 
       function getActiveFilters() {
         var filters = {};
@@ -155,41 +215,62 @@ const ORPHADATA_TOTAL = 10_101;
         if (el) el.textContent = count != null ? "(" + count + ")" : "";
       }
 
-      function renderResults(items) {
-        resultCount.textContent =
-          items.length + " result" + (items.length === 1 ? "" : "s");
+      function itemHtml(d) {
+        return (
+          '<li class="py-4">' +
+          '<a href="' +
+          d.url +
+          '" class="font-display text-lg font-medium hover:text-primary">' +
+          d.title +
+          "</a>" +
+          '<p class="mt-1 text-sm text-base-content/70">' +
+          (d.excerpt || "") +
+          "</p>" +
+          '<p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/60">' +
+          (d.orphaCode ? "<span>" + d.orphaCode + "</span>" : "") +
+          (d.system ? "<span>" + d.system + "</span>" : "") +
+          (d.inheritance ? "<span>" + d.inheritance + "</span>" : "") +
+          "</p>" +
+          "</li>"
+        );
+      }
 
-        if (items.length === 0) {
+      // Renders whatever's currently visible given `currentItems` and
+      // `visibleCount`, plus a "Show more" button when there's more than
+      // is currently shown. Doesn't re-run search/filtering — that's
+      // runSearch's job. This just handles what's already been computed.
+      function renderPage() {
+        resultCount.textContent =
+          currentItems.length + " result" + (currentItems.length === 1 ? "" : "s");
+
+        if (currentItems.length === 0) {
           resultsList.innerHTML =
             '<li class="py-8 text-sm text-base-content/60">' +
             "No matches in this prototype's sample — that reflects what's in the " +
             "current sample, not whether the disease is real. Try a different " +
             "spelling, a related symptom, or fewer filters." +
             "</li>";
+          showMoreContainer.innerHTML = "";
           return;
         }
 
-        resultsList.innerHTML = items
-          .map(function (d) {
-            return (
-              '<li class="py-4">' +
-              '<a href="' +
-              d.url +
-              '" class="font-display text-lg font-medium hover:text-primary">' +
-              d.title +
-              "</a>" +
-              '<p class="mt-1 text-sm text-base-content/70">' +
-              (d.excerpt || "") +
-              "</p>" +
-              '<p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/60">' +
-              (d.orphaCode ? "<span>" + d.orphaCode + "</span>" : "") +
-              (d.system ? "<span>" + d.system + "</span>" : "") +
-              (d.inheritance ? "<span>" + d.inheritance + "</span>" : "") +
-              "</p>" +
-              "</li>"
-            );
-          })
-          .join("");
+        var visible = currentItems.slice(0, visibleCount);
+        resultsList.innerHTML = visible.map(itemHtml).join("");
+
+        var remaining = currentItems.length - visible.length;
+        if (remaining > 0) {
+          var nextBatch = Math.min(PAGE_SIZE, remaining);
+          showMoreContainer.innerHTML =
+            '<button type="button" id="show-more-btn" class="w-full rounded-field border border-base-300 py-2 text-sm text-base-content/70 transition-colors hover:border-primary hover:text-primary">' +
+            "Show " + nextBatch + " more (" + remaining + " left)" +
+            "</button>";
+          document.getElementById("show-more-btn").addEventListener("click", function () {
+            visibleCount += PAGE_SIZE;
+            renderPage();
+          });
+        } else {
+          showMoreContainer.innerHTML = "";
+        }
       }
 
       function debounce(fn, ms) {
@@ -209,23 +290,28 @@ const ORPHADATA_TOTAL = 10_101;
 
         if (pagefind) {
           return pagefind.search(query || null, { filters: filters }).then(function (search) {
+            // No slice here — loading .data() for every match (capped in
+            // the low hundreds at most, given the dataset size) is fast
+            // since Pagefind reads from its already-loaded local index.
+            // Paging into that full set happens in renderPage, client-side.
             return Promise.all(
-              search.results.slice(0, 50).map(function (r) {
+              search.results.map(function (r) {
                 return r.data();
               })
             ).then(function (results) {
-              renderResults(
-                results.map(function (d) {
-                  return {
-                    url: d.url,
-                    title: (d.meta && d.meta.title) || d.url,
-                    excerpt: (d.meta && d.meta.note) || d.excerpt,
-                    orphaCode: d.meta && d.meta.orphaCode,
-                    system: d.meta && d.meta.system,
-                    inheritance: d.meta && d.meta.inheritance,
-                  };
-                })
-              );
+              currentItems = results.map(function (d) {
+                return {
+                  url: d.url,
+                  title: (d.meta && d.meta.title) || d.url,
+                  excerpt: (d.meta && d.meta.note) || d.excerpt,
+                  orphaCode: d.meta && d.meta.orphaCode,
+                  system: d.meta && d.meta.system,
+                  inheritance: d.meta && d.meta.inheritance,
+                };
+              });
+              visibleCount = PAGE_SIZE;
+              renderPage();
+
               Object.keys(search.filters || {}).forEach(function (group) {
                 Object.entries(search.filters[group]).forEach(function (entry) {
                   updateCount(group, entry[0], entry[1]);
@@ -246,30 +332,39 @@ const ORPHADATA_TOTAL = 10_101;
             );
           };
 
+          var matchesArrayFacet = function (group, values) {
+            if (!filters[group] || !filters[group].length) return true;
+            return values.some(function (v) {
+              return filters[group].indexOf(v) !== -1;
+            });
+          };
+          var matchesValueFacet = function (group, value) {
+            if (!filters[group] || !filters[group].length) return true;
+            return filters[group].indexOf(value) !== -1;
+          };
+
           var filtered = fallbackData.filter(function (d) {
-            var matchesSystem =
-              !filters.System || !filters.System.length || filters.System.indexOf(d.system) !== -1;
-            var matchesInheritance =
-              !filters.Inheritance ||
-              !filters.Inheritance.length ||
-              d.inheritance.some(function (i) {
-                return filters.Inheritance.indexOf(i) !== -1;
-              });
-            return matchesQuery(d) && matchesSystem && matchesInheritance;
+            return (
+              matchesQuery(d) &&
+              matchesValueFacet("System", d.system) &&
+              matchesArrayFacet("Inheritance", d.inheritance) &&
+              matchesArrayFacet("AgeOfOnset", d.ageOfOnset) &&
+              matchesValueFacet("Rarity", d.rarity)
+            );
           });
 
-          renderResults(
-            filtered.map(function (d) {
-              return {
-                url: "/diseases/" + d.slug + "/",
-                title: d.name,
-                excerpt: d.note,
-                orphaCode: d.orphaCode,
-                system: d.system,
-                inheritance: d.inheritance.join(", "),
-              };
-            })
-          );
+          currentItems = filtered.map(function (d) {
+            return {
+              url: "/diseases/" + d.slug + "/",
+              title: d.name,
+              excerpt: d.note,
+              orphaCode: d.orphaCode,
+              system: d.system,
+              inheritance: d.inheritance.join(", "),
+            };
+          });
+          visibleCount = PAGE_SIZE;
+          renderPage();
 
           // Simplified dev-only counts: reflects the query alone, not
           // combined with other active facets. The real Pagefind API
@@ -281,15 +376,31 @@ const ORPHADATA_TOTAL = 10_101;
               fallbackData.filter(function (d) { return d.system === s && matchesQuery(d); }).length
             );
           });
-          var allInheritance = Array.from(
+          Array.from(
             new Set(fallbackData.reduce(function (acc, d) { return acc.concat(d.inheritance); }, []))
-          );
-          allInheritance.forEach(function (i) {
+          ).forEach(function (i) {
             updateCount(
               "Inheritance",
               i,
               fallbackData.filter(function (d) { return d.inheritance.indexOf(i) !== -1 && matchesQuery(d); })
                 .length
+            );
+          });
+          Array.from(
+            new Set(fallbackData.reduce(function (acc, d) { return acc.concat(d.ageOfOnset); }, []))
+          ).forEach(function (a) {
+            updateCount(
+              "AgeOfOnset",
+              a,
+              fallbackData.filter(function (d) { return d.ageOfOnset.indexOf(a) !== -1 && matchesQuery(d); })
+                .length
+            );
+          });
+          Array.from(new Set(fallbackData.map(function (d) { return d.rarity; }))).forEach(function (r) {
+            updateCount(
+              "Rarity",
+              r,
+              fallbackData.filter(function (d) { return d.rarity === r && matchesQuery(d); }).length
             );
           });
         }
@@ -319,6 +430,10 @@ const ORPHADATA_TOTAL = 10_101;
             checkboxes.forEach(function (cb) {
               cb.addEventListener("change", runSearch);
             });
+            // Establishes the JS-paginated view immediately (replacing the
+            // server-rendered first-20 list with the live-search-backed
+            // one) rather than waiting for the first user interaction.
+            runSearch();
           });
       }
 
