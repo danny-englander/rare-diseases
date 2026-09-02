@@ -1,14 +1,16 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @plugin "daisyui" {
-  themes: reflib --default, reflib-dark --prefersdark;
+  themes:
+    reflib --default,
+    reflib-dark --prefersdark;
 }
 
 /* Warm, plain-spoken "reference library" palette — not clinical blue,
    not marketing cream+terracotta. Muted teal for trust/clarity, warm
    amber reserved for rarity/prevalence signals. */
 @plugin "daisyui/theme" {
-  name: "reflib";
+  name: 'reflib';
   default: true;
   color-scheme: light;
 
@@ -47,14 +49,16 @@
 }
 
 @plugin "daisyui/theme" {
-  name: "reflib-dark";
+  name: 'reflib-dark';
   prefersdark: true;
   color-scheme: dark;
 
-  --color-base-100: #211e1a;
-  --color-base-200: #2a2621;
-  --color-base-300: #383329;
-  --color-base-content: #ede9e0;
+  /* Tailwind slate scale (900/800/700/600) instead of the original warm
+     charcoal — cooler, less brown. */
+  --color-base-100: oklch(22.5% 0.011 216.9); /* slate-900 */
+  --color-base-200: oklch(27.5% 0.011 216.9); /* slate-800 */
+  --color-base-300: oklch(33.5% 0.011 216.9); /* slate-700 */
+  --color-base-content: #f1f5f9; /* slate-100, cooled to match */
 
   --color-primary: #74a89f;
   --color-primary-content: #12201d;
@@ -65,8 +69,8 @@
   --color-accent: #c39abb;
   --color-accent-content: #241a22;
 
-  --color-neutral: #ede9e0;
-  --color-neutral-content: #211e1a;
+  --color-neutral: #475569; /* slate-600 */
+  --color-neutral-content: #f1f5f9;
 
   --color-info: #7fa8cc;
   --color-info-content: #121c26;
@@ -86,8 +90,8 @@
 }
 
 @theme {
-  --font-serif: "Source Serif 4", Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Source Serif 4', Georgia, serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
