@@ -1,0 +1,62 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "A reference tool for looking up rare diseases." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      /* Apply any saved theme before first paint, to avoid a flash of the
+         wrong theme. Falls back to the CSS prefers-color-scheme default. */
+      try {
+        const saved = localStorage.getItem("theme");
+        if (saved) document.documentElement.setAttribute("data-theme", saved);
+      } catch (e) {}
+    </script>
+  </head>
+  <body class="min-h-screen bg-base-100 text-base-content">
+    <header data-pagefind-ignore class="border-b border-base-300">
+      <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+        <a href="/" class="font-display text-lg font-semibold tracking-tight">
+          Rare Disease Index
+        </a>
+        <a
+          href="https://www.orphadata.com/"
+          target="_blank"
+          rel="noopener"
+          class="hidden text-xs text-base-content/60 sm:block"
+        >
+          Data via Orphadata
+        </a>
+      </div>
+    </header>
+    <slot />
+    <footer data-pagefind-ignore class="mt-16 border-t border-base-300">
+      <div class="mx-auto max-w-5xl px-4 py-8 text-xs text-base-content/60 sm:px-6">
+        This is a prototype. Disease summaries are simplified and not a substitute for medical advice.
+      </div>
+    </footer>
+    <script>
+      import { themeChange } from "theme-change";
+      themeChange();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,328 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import { diseases, systems, inheritancePatterns } from "../data/diseases";
+
+// Orphadata's July 2026 release (en_product7.xml, "linearisation") lists
+// 10,101 total rare diseases — see README for how the sample here relates
+// to that full count.
+const ORPHADATA_TOTAL = 10_101;
+---
+
+<Layout title="Rare Disease Index — Search">
+  <main class="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+          Find a rare disease
+        </h1>
+        <p class="mt-1 text-base-content/70">
+          Search by name, synonym, or symptom. Filter by body system or inheritance pattern.
+        </p>
+        <p class="mt-3 max-w-2xl border-l-2 border-base-300 pl-3 text-sm text-base-content/60">
+          This is a working prototype of the search interface, not a comprehensive database
+          — it currently covers a sample of {diseases.length} of Orphadata's {ORPHADATA_TOTAL.toLocaleString()} catalogued
+          rare diseases. Not finding something here doesn't mean it isn't real or rare.
+        </p>
+      </div>
+      <ThemeToggle />
+    </div>
+
+    <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[220px_1fr]">
+      <aside class="space-y-8">
+        <div>
+          <label for="search-input" class="sr-only">Search</label>
+          <input
+            id="search-input"
+            type="search"
+            placeholder="Search…"
+            class="input input-bordered w-full"
+            autocomplete="off"
+          />
+        </div>
+
+        <fieldset>
+          <legend class="text-sm font-medium text-base-content/60">Body system</legend>
+          <div class="mt-3 space-y-2">
+            {
+              systems.map((system) => (
+                <label class="flex cursor-pointer items-center justify-between gap-2 text-sm">
+                  <span class="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      class="checkbox checkbox-sm"
+                      data-facet-group="System"
+                      data-facet-value={system}
+                    />
+                    {system}
+                  </span>
+                  <span
+                    class="text-xs text-base-content/50"
+                    data-count-for={`System:${system}`}
+                  >
+                    ({diseases.filter((d) => d.system === system).length})
+                  </span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend class="text-sm font-medium text-base-content/60">Inheritance pattern</legend>
+          <div class="mt-3 space-y-2">
+            {
+              inheritancePatterns.map((pattern) => (
+                <label class="flex cursor-pointer items-center justify-between gap-2 text-sm">
+                  <span class="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      class="checkbox checkbox-sm"
+                      data-facet-group="Inheritance"
+                      data-facet-value={pattern}
+                    />
+                    {pattern}
+                  </span>
+                  <span
+                    class="text-xs text-base-content/50"
+                    data-count-for={`Inheritance:${pattern}`}
+                  >
+                    ({diseases.filter((d) => d.inheritance.includes(pattern)).length})
+                  </span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+      </aside>
+
+      <div>
+        <p id="result-count" class="text-sm text-base-content/60" aria-live="polite">
+          {diseases.length} results
+        </p>
+        <ul id="results-list" class="mt-2 divide-y divide-base-300">
+          {
+            diseases.map((d) => (
+              <li class="py-4">
+                <a href={`/diseases/${d.slug}/`} class="font-display text-lg font-medium hover:text-primary">
+                  {d.name}
+                </a>
+                <p class="mt-1 text-sm text-base-content/70">{d.note}</p>
+                <p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/60">
+                  <span>{d.orphaCode}</span>
+                  <span>{d.system}</span>
+                  <span>{d.inheritance.join(", ")}</span>
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <script type="application/json" id="diseases-data" set:html={JSON.stringify(diseases)} />
+
+  <script is:inline>
+    (function () {
+      var searchInput = document.getElementById("search-input");
+      var resultsList = document.getElementById("results-list");
+      var resultCount = document.getElementById("result-count");
+      var checkboxes = Array.prototype.slice.call(
+        document.querySelectorAll("[data-facet-group]")
+      );
+
+      var pagefind = null;
+      var fallbackData = null;
+
+      function getActiveFilters() {
+        var filters = {};
+        checkboxes.forEach(function (cb) {
+          if (cb.checked) {
+            var group = cb.dataset.facetGroup;
+            var value = cb.dataset.facetValue;
+            filters[group] = filters[group] || [];
+            filters[group].push(value);
+          }
+        });
+        return filters;
+      }
+
+      function updateCount(group, value, count) {
+        var el = document.querySelector(
+          '[data-count-for="' + group + ":" + value + '"]'
+        );
+        if (el) el.textContent = count != null ? "(" + count + ")" : "";
+      }
+
+      function renderResults(items) {
+        resultCount.textContent =
+          items.length + " result" + (items.length === 1 ? "" : "s");
+
+        if (items.length === 0) {
+          resultsList.innerHTML =
+            '<li class="py-8 text-sm text-base-content/60">' +
+            "No matches in this prototype's sample — that reflects what's in the " +
+            "current sample, not whether the disease is real. Try a different " +
+            "spelling, a related symptom, or fewer filters." +
+            "</li>";
+          return;
+        }
+
+        resultsList.innerHTML = items
+          .map(function (d) {
+            return (
+              '<li class="py-4">' +
+              '<a href="' +
+              d.url +
+              '" class="font-display text-lg font-medium hover:text-primary">' +
+              d.title +
+              "</a>" +
+              '<p class="mt-1 text-sm text-base-content/70">' +
+              (d.excerpt || "") +
+              "</p>" +
+              '<p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/60">' +
+              (d.orphaCode ? "<span>" + d.orphaCode + "</span>" : "") +
+              (d.system ? "<span>" + d.system + "</span>" : "") +
+              (d.inheritance ? "<span>" + d.inheritance + "</span>" : "") +
+              "</p>" +
+              "</li>"
+            );
+          })
+          .join("");
+      }
+
+      function debounce(fn, ms) {
+        var timer;
+        return function () {
+          var args = arguments;
+          clearTimeout(timer);
+          timer = setTimeout(function () {
+            fn.apply(null, args);
+          }, ms);
+        };
+      }
+
+      function runSearch() {
+        var query = searchInput.value.trim();
+        var filters = getActiveFilters();
+
+        if (pagefind) {
+          return pagefind.search(query || null, { filters: filters }).then(function (search) {
+            return Promise.all(
+              search.results.slice(0, 50).map(function (r) {
+                return r.data();
+              })
+            ).then(function (results) {
+              renderResults(
+                results.map(function (d) {
+                  return {
+                    url: d.url,
+                    title: (d.meta && d.meta.title) || d.url,
+                    excerpt: (d.meta && d.meta.note) || d.excerpt,
+                    orphaCode: d.meta && d.meta.orphaCode,
+                    system: d.meta && d.meta.system,
+                    inheritance: d.meta && d.meta.inheritance,
+                  };
+                })
+              );
+              Object.keys(search.filters || {}).forEach(function (group) {
+                Object.entries(search.filters[group]).forEach(function (entry) {
+                  updateCount(group, entry[0], entry[1]);
+                });
+              });
+            });
+          });
+        }
+
+        if (fallbackData) {
+          var q = query.toLowerCase();
+          var matchesQuery = function (d) {
+            return (
+              !q ||
+              d.name.toLowerCase().indexOf(q) !== -1 ||
+              d.synonyms.join(" ").toLowerCase().indexOf(q) !== -1 ||
+              d.symptoms.join(" ").toLowerCase().indexOf(q) !== -1
+            );
+          };
+
+          var filtered = fallbackData.filter(function (d) {
+            var matchesSystem =
+              !filters.System || !filters.System.length || filters.System.indexOf(d.system) !== -1;
+            var matchesInheritance =
+              !filters.Inheritance ||
+              !filters.Inheritance.length ||
+              d.inheritance.some(function (i) {
+                return filters.Inheritance.indexOf(i) !== -1;
+              });
+            return matchesQuery(d) && matchesSystem && matchesInheritance;
+          });
+
+          renderResults(
+            filtered.map(function (d) {
+              return {
+                url: "/diseases/" + d.slug + "/",
+                title: d.name,
+                excerpt: d.note,
+                orphaCode: d.orphaCode,
+                system: d.system,
+                inheritance: d.inheritance.join(", "),
+              };
+            })
+          );
+
+          // Simplified dev-only counts: reflects the query alone, not
+          // combined with other active facets. The real Pagefind API
+          // (used in the built site) computes these properly.
+          Array.from(new Set(fallbackData.map(function (d) { return d.system; }))).forEach(function (s) {
+            updateCount(
+              "System",
+              s,
+              fallbackData.filter(function (d) { return d.system === s && matchesQuery(d); }).length
+            );
+          });
+          var allInheritance = Array.from(
+            new Set(fallbackData.reduce(function (acc, d) { return acc.concat(d.inheritance); }, []))
+          );
+          allInheritance.forEach(function (i) {
+            updateCount(
+              "Inheritance",
+              i,
+              fallbackData.filter(function (d) { return d.inheritance.indexOf(i) !== -1 && matchesQuery(d); })
+                .length
+            );
+          });
+        }
+        return Promise.resolve();
+      }
+
+      function init() {
+        import(/* @vite-ignore */ "/pagefind/pagefind.js")
+          .then(function (mod) {
+            return mod.init().then(function () {
+              return mod.filters();
+            }).then(function () {
+              pagefind = mod;
+            });
+          })
+          .catch(function (e) {
+            console.warn(
+              "[rare-disease-search] Pagefind index not found — this is expected under `astro dev`. " +
+                "Run `npm run build` to generate the search index. Falling back to an in-memory demo search.",
+              e
+            );
+            var dataEl = document.getElementById("diseases-data");
+            fallbackData = JSON.parse((dataEl && dataEl.textContent) || "[]");
+          })
+          .then(function () {
+            searchInput.addEventListener("input", debounce(runSearch, 150));
+            checkboxes.forEach(function (cb) {
+              cb.addEventListener("change", runSearch);
+            });
+          });
+      }
+
+      init();
+    })();
+  </script>
+</Layout>

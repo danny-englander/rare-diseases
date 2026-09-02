@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: reflib --default, reflib-dark --prefersdark;
+}
+
+/* Warm, plain-spoken "reference library" palette — not clinical blue,
+   not marketing cream+terracotta. Muted teal for trust/clarity, warm
+   amber reserved for rarity/prevalence signals. */
+@plugin "daisyui/theme" {
+  name: "reflib";
+  default: true;
+  color-scheme: light;
+
+  --color-base-100: #faf8f4;
+  --color-base-200: #f1eee7;
+  --color-base-300: #e4dfd4;
+  --color-base-content: #2b2822;
+
+  --color-primary: #3d6b66;
+  --color-primary-content: #f4f6f5;
+
+  --color-secondary: #b98a3c;
+  --color-secondary-content: #2b2822;
+
+  --color-accent: #8b5e83;
+  --color-accent-content: #f4f0f3;
+
+  --color-neutral: #4a463d;
+  --color-neutral-content: #faf8f4;
+
+  --color-info: #4779a6;
+  --color-info-content: #f4f6f5;
+  --color-success: #4f7d4f;
+  --color-success-content: #f4f6f5;
+  --color-warning: #b9812f;
+  --color-warning-content: #2b2822;
+  --color-error: #a54b42;
+  --color-error-content: #f4f6f5;
+
+  --radius-selector: 0.375rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.5rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "reflib-dark";
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: #211e1a;
+  --color-base-200: #2a2621;
+  --color-base-300: #383329;
+  --color-base-content: #ede9e0;
+
+  --color-primary: #74a89f;
+  --color-primary-content: #12201d;
+
+  --color-secondary: #d9a857;
+  --color-secondary-content: #241d10;
+
+  --color-accent: #c39abb;
+  --color-accent-content: #241a22;
+
+  --color-neutral: #ede9e0;
+  --color-neutral-content: #211e1a;
+
+  --color-info: #7fa8cc;
+  --color-info-content: #121c26;
+  --color-success: #82ab7f;
+  --color-success-content: #12200f;
+  --color-warning: #d9a857;
+  --color-warning-content: #241d10;
+  --color-error: #cf7c72;
+  --color-error-content: #260f0c;
+
+  --radius-selector: 0.375rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.5rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  --font-serif: "Source Serif 4", Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  font-family: var(--font-sans);
+}
+
+.font-display {
+  font-family: var(--font-serif);
+}
