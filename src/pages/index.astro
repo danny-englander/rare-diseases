@@ -155,6 +155,7 @@ const sortedDiseases = [...diseases].sort((a, b) => a.name.localeCompare(b.name)
       </aside>
 
       <div>
+        <div id="active-filters" class="mb-3 flex flex-wrap items-center gap-2"></div>
         <p id="result-count" class="text-sm text-base-content/60" aria-live="polite">
           {diseases.length} results
         </p>
@@ -190,6 +191,7 @@ const sortedDiseases = [...diseases].sort((a, b) => a.name.localeCompare(b.name)
       var resultsList = document.getElementById("results-list");
       var resultCount = document.getElementById("result-count");
       var showMoreContainer = document.getElementById("show-more-container");
+      var activeFiltersContainer = document.getElementById("active-filters");
       var checkboxes = Array.prototype.slice.call(
         document.querySelectorAll("[data-facet-group]")
       );
@@ -217,6 +219,70 @@ const sortedDiseases = [...diseases].sort((a, b) => a.name.localeCompare(b.name)
           '[data-count-for="' + group + ":" + value + '"]'
         );
         if (el) el.textContent = count != null ? "(" + count + ")" : "";
+      }
+
+      // Renders one removable pill per checked facet checkbox, derived
+      // straight from checkbox state — the checkboxes stay the single
+      // source of truth, this is just a view over them.
+      function renderActiveFilters() {
+        var filters = getActiveFilters();
+        var pills = [];
+        Object.keys(filters).forEach(function (group) {
+          filters[group].forEach(function (value) {
+            pills.push({ group: group, value: value });
+          });
+        });
+
+        if (!pills.length) {
+          activeFiltersContainer.innerHTML = "";
+          return;
+        }
+
+        var html = pills
+          .map(function (p) {
+            return (
+              '<button type="button" class="badge badge-outline gap-1.5 pr-2" data-remove-filter ' +
+              'data-facet-group="' + p.group + '" data-facet-value="' + p.value + '">' +
+              '<span>' + p.value + "</span>" +
+              '<span aria-hidden="true">×</span>' +
+              '<span class="sr-only">Remove ' + p.value + " filter</span>" +
+              "</button>"
+            );
+          })
+          .join("");
+
+        if (pills.length > 1) {
+          html +=
+            '<button type="button" id="clear-filters-btn" ' +
+            'class="text-xs text-base-content/60 underline hover:text-primary">' +
+            "Clear all</button>";
+        }
+
+        activeFiltersContainer.innerHTML = html;
+
+        activeFiltersContainer.querySelectorAll("[data-remove-filter]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var group = btn.dataset.facetGroup;
+            var value = btn.dataset.facetValue;
+            var cb = checkboxes.filter(function (c) {
+              return c.dataset.facetGroup === group && c.dataset.facetValue === value;
+            })[0];
+            if (cb) {
+              cb.checked = false;
+              runSearch();
+            }
+          });
+        });
+
+        var clearBtn = document.getElementById("clear-filters-btn");
+        if (clearBtn) {
+          clearBtn.addEventListener("click", function () {
+            checkboxes.forEach(function (cb) {
+              cb.checked = false;
+            });
+            runSearch();
+          });
+        }
       }
 
       function itemHtml(d) {
@@ -295,6 +361,8 @@ const sortedDiseases = [...diseases].sort((a, b) => a.name.localeCompare(b.name)
       function runSearch() {
         var query = searchInput.value.trim();
         var filters = getActiveFilters();
+
+        renderActiveFilters();
 
         if (pagefind) {
           return pagefind.search(query || null, { filters: filters }).then(function (search) {
