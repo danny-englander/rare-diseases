@@ -7,6 +7,10 @@ import { diseases, systems, inheritancePatterns, ageOfOnsetOptions, rarityOption
 // 10,101 total rare diseases — see README for how the sample here relates
 // to that full count.
 const ORPHADATA_TOTAL = 10_101;
+
+// Alphabetical for the initial server-rendered list; client-side search
+// re-sorts the same way after every query/filter change.
+const sortedDiseases = [...diseases].sort((a, b) => a.name.localeCompare(b.name));
 ---
 
 <Layout title="Rare Disease Index — Search">
@@ -156,7 +160,7 @@ const ORPHADATA_TOTAL = 10_101;
         </p>
         <ul id="results-list" class="mt-2 divide-y divide-base-300">
           {
-            diseases.slice(0, 20).map((d) => (
+            sortedDiseases.slice(0, 20).map((d) => (
               <li class="py-4">
                 <a href={`/diseases/${d.slug}/`} class="font-display text-lg font-medium hover:text-primary">
                   {d.name}
@@ -273,6 +277,10 @@ const ORPHADATA_TOTAL = 10_101;
         }
       }
 
+      function byTitle(a, b) {
+        return a.title.localeCompare(b.title);
+      }
+
       function debounce(fn, ms) {
         var timer;
         return function () {
@@ -309,6 +317,7 @@ const ORPHADATA_TOTAL = 10_101;
                   inheritance: d.meta && d.meta.inheritance,
                 };
               });
+              currentItems.sort(byTitle);
               visibleCount = PAGE_SIZE;
               renderPage();
 
@@ -363,6 +372,7 @@ const ORPHADATA_TOTAL = 10_101;
               inheritance: d.inheritance.join(", "),
             };
           });
+          currentItems.sort(byTitle);
           visibleCount = PAGE_SIZE;
           renderPage();
 
