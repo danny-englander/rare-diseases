@@ -50,8 +50,33 @@ const { title, description = "A reference tool for looking up rare diseases." } 
     </header>
     <slot />
     <footer data-pagefind-ignore class="mt-16 border-t border-base-300">
-      <div class="mx-auto max-w-5xl px-4 py-8 text-xs text-base-content/60 sm:px-6">
-        This is a prototype. Disease summaries are simplified and not a substitute for medical advice.
+      <div class="mx-auto max-w-5xl space-y-3 px-4 py-8 text-xs text-base-content/60 sm:px-6">
+        <p>
+          This is a prototype. Disease summaries are simplified and not a substitute for medical
+          advice.
+        </p>
+        <p>
+          Orphadata Science: Free access data from Orphanet. © INSERM 1999. Available on{" "}
+          <a
+            href="https://sciences.orphadata.com/"
+            target="_blank"
+            rel="noopener"
+            class="underline decoration-base-content/30 underline-offset-2 hover:text-base-content"
+          >
+            sciences.orphadata.com
+          </a>
+          . Data version July 2026. Licensed under{" "}
+          <a
+            href="https://creativecommons.org/licenses/by/4.0/"
+            target="_blank"
+            rel="noopener"
+            class="underline decoration-base-content/30 underline-offset-2 hover:text-base-content"
+          >
+            CC BY 4.0
+          </a>
+          . This site uses a modified subset of those datasets and is not affiliated with or
+          endorsed by Orphanet or INSERM.
+        </p>
       </div>
     </footer>
     <script>

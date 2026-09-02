@@ -77,6 +77,14 @@ steps" below for pulling everything).
 (their FAQ says to contact them), but the bulk XML/JSON files used here are
 freely downloadable under CC BY 4.0 with a plain HTTP GET.
 
+## Licensing
+
+- **Code** (everything except the generated dataset) is MIT. See `LICENSE`.
+- **Data** in `src/data/diseases.generated.json` is derived from Orphadata
+  Science and remains [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+  Attribution, the data version, and a note that this project modifies a
+  subset of the source files are in `NOTICE` and in the site footer.
+
 ## The prototype says so, on the page
 
 Because the dataset is a sample (920 of 10,101 real diseases), the search
@@ -137,6 +145,3 @@ result). If you add more logic there, keep it framework-free JS.
   free approach, but with real fuzzy/Levenshtein matching
 - Collapse the facet sidebar into a `<details>`/drawer on mobile — right
   now it's always expanded, which pushes results down on small screens
-- Cite Orphadata per their citation guidelines if this goes further
-  ("Orphadata: Free access data from Orphanet. © INSERM 1999. Available
-  on https://www.orphadata.com. Data version [XML data version].")

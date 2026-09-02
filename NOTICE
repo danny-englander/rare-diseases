@@ -1,0 +1,21 @@
+This repository contains original software and third-party data.
+
+Software (source under src/ and scripts/, configuration, and documentation,
+excluding generated data)
+Copyright (c) 2026 Danny Englander
+Licensed under the MIT License. See LICENSE.
+
+Data
+src/data/diseases.generated.json is derived from Orphadata Science datasets
+(products 1, 3, 4, and 9), licensed under Creative Commons Attribution 4.0
+International (CC BY 4.0):
+https://creativecommons.org/licenses/by/4.0/
+
+Citation:
+Orphadata Science: Free access data from Orphanet. © INSERM 1999.
+Available on https://sciences.orphadata.com/. Data version July 2026.
+
+This project uses a subset of those datasets (selected classifications, a
+capped sample, and frequency-filtered phenotypes) and generates short
+factual notes from structured fields. It is not affiliated with or endorsed
+by Orphanet or INSERM.
