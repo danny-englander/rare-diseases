@@ -125,7 +125,7 @@ const facetGroups = [
         id='search-input'
         type='search'
         placeholder='Search…'
-        class='input input-bordered min-h-11 w-full'
+        class='input input-bordered min-h-11 w-full border-primary focus:border-primary focus:outline-none'
         autocomplete='off'
       />
 
@@ -133,7 +133,7 @@ const facetGroups = [
         type='button'
         id='filter-trigger'
         aria-haspopup='dialog'
-        class='btn btn-outline mt-3 min-h-11 w-full justify-between font-normal'
+        class='btn btn-outline border-primary mt-3 min-h-11 w-full justify-between font-normal'
       >
         <span class='flex items-center gap-2'>
           <svg
@@ -169,8 +169,7 @@ const facetGroups = [
         </svg>
       </button>
 
-      <div id='active-filters' class='mt-3 flex flex-wrap items-center gap-2'>
-      </div>
+      <div id='active-filters' class='mt-3'></div>
 
       <p
         id='result-count'
@@ -381,7 +380,7 @@ const facetGroups = [
           return;
         }
 
-        var html = pills
+        var chipsHtml = pills
           .map(function (p) {
             var color = GROUP_COLORS[p.group] || "neutral";
             return (
@@ -405,10 +404,12 @@ const facetGroups = [
           })
           .join("");
 
-        if (pills.length > 1) {
+        var html = '<div class="flex flex-wrap items-center gap-2">' + chipsHtml + "</div>";
+
+        if (pills.length >= 1) {
           html +=
             '<button type="button" id="clear-filters-btn" ' +
-            'class="text-xs text-base-content/95 underline hover:text-primary">' +
+            'class="btn btn-ghost btn-sm mt-2">' +
             "Clear all</button>";
         }
 
