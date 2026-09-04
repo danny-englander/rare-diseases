@@ -103,3 +103,14 @@ html {
 .font-display {
   font-family: var(--font-serif);
 }
+
+/* Filter panel: a bottom sheet on mobile, a right-hand drawer from md: up.
+   Positioning/alignment lives in Tailwind classes on the element; this
+   just handles what a plain <dialog> doesn't expose as utilities. */
+#filter-dialog[open] {
+  display: flex;
+}
+
+#filter-dialog::backdrop {
+  background-color: rgb(0 0 0 / 0.5);
+}

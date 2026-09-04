@@ -11,6 +11,40 @@ const ORPHADATA_TOTAL = 10_101;
 // Alphabetical for the initial server-rendered list; client-side search
 // re-sorts the same way after every query/filter change.
 const sortedDiseases = [...diseases].sort((a, b) => a.name.localeCompare(b.name));
+
+// Drives the nested collapse groups inside the filter panel. The first
+// two (most commonly filtered) start expanded; the rest start collapsed
+// so the panel doesn't open to a wall of facets.
+const facetGroups = [
+  {
+    key: "System",
+    legend: "Body system",
+    options: systems,
+    defaultOpen: true,
+    count: (v: string) => diseases.filter((d) => d.system === v).length,
+  },
+  {
+    key: "Inheritance",
+    legend: "Inheritance pattern",
+    options: inheritancePatterns,
+    defaultOpen: true,
+    count: (v: string) => diseases.filter((d) => d.inheritance.includes(v)).length,
+  },
+  {
+    key: "AgeOfOnset",
+    legend: "Typical age of onset",
+    options: ageOfOnsetOptions,
+    defaultOpen: false,
+    count: (v: string) => diseases.filter((d) => d.ageOfOnset.includes(v)).length,
+  },
+  {
+    key: "Rarity",
+    legend: "Rarity",
+    options: rarityOptions,
+    defaultOpen: false,
+    count: (v: string) => diseases.filter((d) => d.rarity === v).length,
+  },
+];
 ---
 
 <Layout title="Rare Disease Index — Search">
@@ -32,154 +66,104 @@ const sortedDiseases = [...diseases].sort((a, b) => a.name.localeCompare(b.name)
       <ThemeToggle />
     </div>
 
-    <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[220px_1fr]">
-      <aside class="space-y-8">
-        <div>
-          <label for="search-input" class="sr-only">Search</label>
-          <input
-            id="search-input"
-            type="search"
-            placeholder="Search…"
-            class="input input-bordered w-full"
-            autocomplete="off"
-          />
-        </div>
+    <div class="mx-auto mt-8 max-w-2xl">
+      <label for="search-input" class="sr-only">Search</label>
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Search…"
+        class="input input-bordered min-h-11 w-full"
+        autocomplete="off"
+      />
 
-        <fieldset>
-          <legend class="text-sm font-medium text-base-content/60">Body system</legend>
-          <div class="mt-3 space-y-2">
-            {
-              systems.map((system) => (
-                <label class="flex cursor-pointer items-center justify-between gap-2 text-sm">
-                  <span class="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      class="checkbox checkbox-sm"
-                      data-facet-group="System"
-                      data-facet-value={system}
-                    />
-                    {system}
-                  </span>
-                  <span
-                    class="text-xs text-base-content/50"
-                    data-count-for={`System:${system}`}
-                  >
-                    ({diseases.filter((d) => d.system === system).length})
-                  </span>
-                </label>
-              ))
-            }
-          </div>
-        </fieldset>
+      <button
+        type="button"
+        id="filter-trigger"
+        aria-haspopup="dialog"
+        class="btn btn-outline mt-3 min-h-11 w-full justify-between font-normal"
+      >
+        <span class="flex items-center gap-2">
+          <svg class="h-4 w-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
+          </svg>
+          <span id="filter-trigger-label">Filters · {diseases.length} results</span>
+        </span>
+        <svg class="h-4 w-4 shrink-0 text-base-content/50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </button>
 
-        <fieldset>
-          <legend class="text-sm font-medium text-base-content/60">Inheritance pattern</legend>
-          <div class="mt-3 space-y-2">
-            {
-              inheritancePatterns.map((pattern) => (
-                <label class="flex cursor-pointer items-center justify-between gap-2 text-sm">
-                  <span class="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      class="checkbox checkbox-sm"
-                      data-facet-group="Inheritance"
-                      data-facet-value={pattern}
-                    />
-                    {pattern}
-                  </span>
-                  <span
-                    class="text-xs text-base-content/50"
-                    data-count-for={`Inheritance:${pattern}`}
-                  >
-                    ({diseases.filter((d) => d.inheritance.includes(pattern)).length})
-                  </span>
-                </label>
-              ))
-            }
-          </div>
-        </fieldset>
+      <div id="active-filters" class="mt-3 flex flex-wrap items-center gap-2"></div>
 
-        <fieldset>
-          <legend class="text-sm font-medium text-base-content/60">Typical age of onset</legend>
-          <div class="mt-3 space-y-2">
-            {
-              ageOfOnsetOptions.map((onset) => (
-                <label class="flex cursor-pointer items-center justify-between gap-2 text-sm">
-                  <span class="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      class="checkbox checkbox-sm"
-                      data-facet-group="AgeOfOnset"
-                      data-facet-value={onset}
-                    />
-                    {onset}
-                  </span>
-                  <span
-                    class="text-xs text-base-content/50"
-                    data-count-for={`AgeOfOnset:${onset}`}
-                  >
-                    ({diseases.filter((d) => d.ageOfOnset.includes(onset)).length})
-                  </span>
-                </label>
-              ))
-            }
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend class="text-sm font-medium text-base-content/60">Rarity</legend>
-          <div class="mt-3 space-y-2">
-            {
-              rarityOptions.map((rarity) => (
-                <label class="flex cursor-pointer items-center justify-between gap-2 text-sm">
-                  <span class="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      class="checkbox checkbox-sm"
-                      data-facet-group="Rarity"
-                      data-facet-value={rarity}
-                    />
-                    {rarity}
-                  </span>
-                  <span
-                    class="text-xs text-base-content/50"
-                    data-count-for={`Rarity:${rarity}`}
-                  >
-                    ({diseases.filter((d) => d.rarity === rarity).length})
-                  </span>
-                </label>
-              ))
-            }
-          </div>
-        </fieldset>
-      </aside>
-
-      <div>
-        <div id="active-filters" class="mb-3 flex flex-wrap items-center gap-2"></div>
-        <p id="result-count" class="text-sm text-base-content/60" aria-live="polite">
-          {diseases.length} results
-        </p>
-        <ul id="results-list" class="mt-2 divide-y divide-base-300">
-          {
-            sortedDiseases.slice(0, 20).map((d) => (
-              <li class="py-4">
-                <a href={`/diseases/${d.slug}/`} class="font-display text-lg font-medium hover:text-primary">
-                  {d.name}
-                </a>
-                <p class="mt-1 text-sm text-base-content/70">{d.note}</p>
-                <p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/60">
-                  <span>{d.orphaCode}</span>
-                  <span>{d.system}</span>
-                  <span>{d.inheritance.join(", ")}</span>
-                </p>
-              </li>
-            ))
-          }
-        </ul>
-        <div id="show-more-container" class="mt-4"></div>
-      </div>
+      <p id="result-count" class="mt-6 text-sm text-base-content/60" aria-live="polite">
+        {diseases.length} results
+      </p>
+      <ul id="results-list" class="mt-2 divide-y divide-base-300">
+        {
+          sortedDiseases.slice(0, 20).map((d) => (
+            <li class="py-4">
+              <a href={`/diseases/${d.slug}/`} class="font-display text-lg font-medium hover:text-primary">
+                {d.name}
+              </a>
+              <p class="mt-1 text-sm text-base-content/70">{d.note}</p>
+              <p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/60">
+                <span>{d.orphaCode}</span>
+                <span>{d.system}</span>
+                <span>{d.inheritance.join(", ")}</span>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+      <div id="show-more-container" class="mt-4"></div>
     </div>
   </main>
+
+  <dialog id="filter-dialog" aria-label="Filters" class="m-0 h-dvh max-h-none w-dvw max-w-none border-0 bg-transparent p-0 items-end justify-center md:items-stretch md:justify-end">
+    <div class="flex max-h-[85dvh] w-full flex-col rounded-t-box bg-base-100 shadow-xl md:h-full md:max-h-none md:w-full md:max-w-sm md:rounded-t-none md:rounded-l-box">
+      <div class="flex shrink-0 items-center justify-between border-b border-base-300 p-4">
+        <h2 class="font-display text-lg font-semibold">Filters</h2>
+        <button type="button" id="filter-close" aria-label="Close filters" class="btn btn-ghost btn-circle btn-sm min-h-11">
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex-1 space-y-3 overflow-y-auto p-4">
+        {
+          facetGroups.map((group) => (
+            <div class="collapse-arrow collapse border border-base-300 bg-base-100">
+              <input type="checkbox" checked={group.defaultOpen} />
+              <div class="collapse-title min-h-0 py-3 text-sm font-medium text-base-content/80">
+                {group.legend}
+              </div>
+              <div class="collapse-content">
+                <div class="flex flex-wrap gap-2 pt-1">
+                  {group.options.map((value) => (
+                    <label class="cursor-pointer">
+                      <input
+                        type="checkbox"
+                        class="peer sr-only"
+                        data-facet-group={group.key}
+                        data-facet-value={value}
+                      />
+                      <span class="badge peer-checked:badge-primary flex min-h-11 items-center gap-1 border border-base-300 px-3 text-sm peer-checked:border-primary">
+                        {value}
+                        <span class="text-xs opacity-60" data-count-for={`${group.key}:${value}`}>
+                          ({group.count(value)})
+                        </span>
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </dialog>
 
   <script type="application/json" id="diseases-data" set:html={JSON.stringify(diseases)} />
 
@@ -192,6 +176,10 @@ const sortedDiseases = [...diseases].sort((a, b) => a.name.localeCompare(b.name)
       var resultCount = document.getElementById("result-count");
       var showMoreContainer = document.getElementById("show-more-container");
       var activeFiltersContainer = document.getElementById("active-filters");
+      var filterTrigger = document.getElementById("filter-trigger");
+      var filterTriggerLabel = document.getElementById("filter-trigger-label");
+      var filterDialog = document.getElementById("filter-dialog");
+      var filterClose = document.getElementById("filter-close");
       var checkboxes = Array.prototype.slice.call(
         document.querySelectorAll("[data-facet-group]")
       );
@@ -200,6 +188,16 @@ const sortedDiseases = [...diseases].sort((a, b) => a.name.localeCompare(b.name)
       var fallbackData = null;
       var currentItems = [];
       var visibleCount = PAGE_SIZE;
+
+      filterTrigger.addEventListener("click", function () {
+        filterDialog.showModal();
+      });
+      filterClose.addEventListener("click", function () {
+        filterDialog.close();
+      });
+      filterDialog.addEventListener("click", function (e) {
+        if (e.target === filterDialog) filterDialog.close();
+      });
 
       function getActiveFilters() {
         var filters = {};
@@ -219,6 +217,17 @@ const sortedDiseases = [...diseases].sort((a, b) => a.name.localeCompare(b.name)
           '[data-count-for="' + group + ":" + value + '"]'
         );
         if (el) el.textContent = count != null ? "(" + count + ")" : "";
+      }
+
+      function updateFilterTriggerLabel() {
+        var filters = getActiveFilters();
+        var activeCount = Object.keys(filters).reduce(function (sum, g) {
+          return sum + filters[g].length;
+        }, 0);
+        var resultText =
+          currentItems.length + " result" + (currentItems.length === 1 ? "" : "s");
+        filterTriggerLabel.textContent =
+          "Filters" + (activeCount ? " (" + activeCount + " active)" : "") + " · " + resultText;
       }
 
       // Renders one removable pill per checked facet checkbox, derived
@@ -312,6 +321,7 @@ const sortedDiseases = [...diseases].sort((a, b) => a.name.localeCompare(b.name)
       function renderPage() {
         resultCount.textContent =
           currentItems.length + " result" + (currentItems.length === 1 ? "" : "s");
+        updateFilterTriggerLabel();
 
         if (currentItems.length === 0) {
           resultsList.innerHTML =
