@@ -1,7 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
-import { diseases, systems, inheritancePatterns, ageOfOnsetOptions, rarityOptions } from "../data/diseases";
+import {
+  diseases,
+  systems,
+  inheritancePatterns,
+  ageOfOnsetOptions,
+  rarityOptions,
+} from "../data/diseases";
 
 // Orphadata's July 2026 release (en_product7.xml, "linearisation") lists
 // 10,101 total rare diseases — see README for how the sample here relates
@@ -10,7 +16,9 @@ const ORPHADATA_TOTAL = 10_101;
 
 // Alphabetical for the initial server-rendered list; client-side search
 // re-sorts the same way after every query/filter change.
-const sortedDiseases = [...diseases].sort((a, b) => a.name.localeCompare(b.name));
+const sortedDiseases = [...diseases].sort((a, b) =>
+  a.name.localeCompare(b.name),
+);
 
 // Drives the nested collapse groups inside the filter panel. The first
 // two (most commonly filtered) start expanded; the rest start collapsed
@@ -28,14 +36,16 @@ const facetGroups = [
     legend: "Inheritance pattern",
     options: inheritancePatterns,
     defaultOpen: true,
-    count: (v: string) => diseases.filter((d) => d.inheritance.includes(v)).length,
+    count: (v: string) =>
+      diseases.filter((d) => d.inheritance.includes(v)).length,
   },
   {
     key: "AgeOfOnset",
     legend: "Typical age of onset",
     options: ageOfOnsetOptions,
     defaultOpen: false,
-    count: (v: string) => diseases.filter((d) => d.ageOfOnset.includes(v)).length,
+    count: (v: string) =>
+      diseases.filter((d) => d.ageOfOnset.includes(v)).length,
   },
   {
     key: "Rarity",
@@ -47,66 +57,104 @@ const facetGroups = [
 ];
 ---
 
-<Layout title="Rare Disease Index — Search">
-  <main class="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-    <div class="flex items-start justify-between gap-4">
+<Layout title='Rare Disease Index — Search'>
+  <main class='mx-auto max-w-5xl px-4 py-8 sm:px-6'>
+    <div class='flex items-start justify-between gap-4'>
       <div>
-        <h1 class="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+        <h1
+          class='font-display text-2xl font-semibold tracking-tight sm:text-3xl'
+        >
           Find a rare disease
         </h1>
-        <p class="mt-1 text-base-content/70">
-          Search by name, synonym, or symptom. Filter by body system or inheritance pattern.
+        <p class='mt-1 text-base-content/95'>
+          Search by name, synonym, or symptom. Filter by body system or
+          inheritance pattern.
         </p>
-        <p class="mt-3 max-w-2xl border-l-2 border-base-300 pl-3 text-sm text-base-content/70">
-          This is a working prototype of the search interface, not a comprehensive database
-          — it currently covers a sample of {diseases.length} of Orphadata's {ORPHADATA_TOTAL.toLocaleString()} catalogued
-          rare diseases. Not finding something here doesn't mean it isn't real or rare.
+        <p
+          class='mt-3 max-w-2xl border-l-2 border-base-300 pl-3 text-sm text-base-content/95'
+        >
+          This is a working prototype of the search interface, not a
+          comprehensive database — it currently covers a sample of {
+            diseases.length
+          } of Orphadata's {ORPHADATA_TOTAL.toLocaleString()} catalogued rare diseases.
+          Not finding something here doesn't mean it isn't real or rare.
         </p>
       </div>
       <ThemeToggle />
     </div>
 
-    <div class="mx-auto mt-8 max-w-2xl">
-      <label for="search-input" class="sr-only">Search</label>
+    <div class='mx-auto mt-8'>
+      <label for='search-input' class='sr-only'>Search</label>
       <input
-        id="search-input"
-        type="search"
-        placeholder="Search…"
-        class="input input-bordered min-h-11 w-full"
-        autocomplete="off"
+        id='search-input'
+        type='search'
+        placeholder='Search…'
+        class='input input-bordered min-h-11 w-full'
+        autocomplete='off'
       />
 
       <button
-        type="button"
-        id="filter-trigger"
-        aria-haspopup="dialog"
-        class="btn btn-outline mt-3 min-h-11 w-full justify-between font-normal"
+        type='button'
+        id='filter-trigger'
+        aria-haspopup='dialog'
+        class='btn btn-outline mt-3 min-h-11 w-full justify-between font-normal'
       >
-        <span class="flex items-center gap-2">
-          <svg class="h-4 w-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
+        <span class='flex items-center gap-2'>
+          <svg
+            class='h-4 w-4 shrink-0'
+            xmlns='http://www.w3.org/2000/svg'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            stroke-width='1.5'
+          >
+            <path
+              stroke-linecap='round'
+              stroke-linejoin='round'
+              d='M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z'
+            ></path>
           </svg>
-          <span id="filter-trigger-label">Filters · {diseases.length} results</span>
+          <span id='filter-trigger-label'
+            >Filters · {diseases.length} results</span
+          >
         </span>
-        <svg class="h-4 w-4 shrink-0 text-base-content/50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        <svg
+          class='h-4 w-4 shrink-0 text-base-content/50'
+          xmlns='http://www.w3.org/2000/svg'
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          stroke-width='1.5'
+        >
+          <path
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            d='M8.25 4.5l7.5 7.5-7.5 7.5'></path>
         </svg>
       </button>
 
-      <div id="active-filters" class="mt-3 flex flex-wrap items-center gap-2"></div>
+      <div id='active-filters' class='mt-3 flex flex-wrap items-center gap-2'>
+      </div>
 
-      <p id="result-count" class="mt-6 text-sm text-base-content/70" aria-live="polite">
+      <p
+        id='result-count'
+        class='mt-6 text-sm text-base-content/95'
+        aria-live='polite'
+      >
         {diseases.length} results
       </p>
-      <ul id="results-list" class="mt-2 divide-y divide-base-300">
+      <ul id='results-list' class='mt-2 divide-y divide-base-300'>
         {
           sortedDiseases.slice(0, 20).map((d) => (
-            <li class="py-4">
-              <a href={`/diseases/${d.slug}/`} class="font-display text-lg font-medium hover:text-primary">
+            <li class='py-4'>
+              <a
+                href={`/diseases/${d.slug}/`}
+                class='font-display text-lg font-medium hover:text-primary'
+              >
                 {d.name}
               </a>
-              <p class="mt-1 text-sm text-base-content/70">{d.note}</p>
-              <p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/70">
+              <p class='mt-1 text-sm text-base-content/95'>{d.note}</p>
+              <p class='mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/95'>
                 <span>{d.orphaCode}</span>
                 <span>{d.system}</span>
                 <span>{d.inheritance.join(", ")}</span>
@@ -115,42 +163,68 @@ const facetGroups = [
           ))
         }
       </ul>
-      <div id="show-more-container" class="mt-4"></div>
+      <div id='show-more-container' class='mt-4'></div>
     </div>
   </main>
 
-  <dialog id="filter-dialog" aria-label="Filters" class="m-0 h-dvh max-h-none w-dvw max-w-none border-0 bg-transparent p-0 items-end justify-center md:items-stretch md:justify-end">
-    <div class="flex max-h-[85dvh] w-full flex-col rounded-t-box bg-base-100 shadow-xl md:h-full md:max-h-none md:w-full md:max-w-sm md:rounded-t-none md:rounded-l-box">
-      <div class="flex shrink-0 items-center justify-between border-b border-base-300 p-4">
-        <h2 class="font-display text-lg font-semibold">Filters</h2>
-        <button type="button" id="filter-close" aria-label="Close filters" class="btn btn-ghost btn-circle btn-sm min-h-11">
-          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+  <dialog
+    id='filter-dialog'
+    aria-label='Filters'
+    class='m-0 h-dvh max-h-none w-dvw max-w-none border-0 bg-transparent p-0 items-end justify-center md:items-stretch md:justify-end'
+  >
+    <div
+      class='flex max-h-[85dvh] w-full flex-col rounded-t-box bg-base-100 shadow-xl md:h-full md:max-h-none md:w-full md:max-w-sm md:rounded-t-none md:rounded-l-box'
+    >
+      <div
+        class='flex shrink-0 items-center justify-between border-b border-base-300 p-4'
+      >
+        <h2 class='font-display text-lg font-semibold'>Filters</h2>
+        <button
+          type='button'
+          id='filter-close'
+          aria-label='Close filters'
+          class='btn btn-ghost btn-circle btn-sm min-h-11'
+        >
+          <svg
+            class='h-5 w-5'
+            xmlns='http://www.w3.org/2000/svg'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            stroke-width='1.5'
+          >
+            <path
+              stroke-linecap='round'
+              stroke-linejoin='round'
+              d='M6 18L18 6M6 6l12 12'></path>
           </svg>
         </button>
       </div>
 
-      <div class="flex-1 space-y-3 overflow-y-auto p-4">
+      <div class='flex-1 space-y-3 overflow-y-auto p-4'>
         {
           facetGroups.map((group) => (
-            <div class="collapse-arrow collapse border border-base-300 bg-base-100">
-              <input type="checkbox" checked={group.defaultOpen} />
-              <div class="collapse-title min-h-0 py-3 text-sm font-medium text-base-content/80">
+            <div class='collapse-arrow collapse border border-base-300 bg-base-100'>
+              <input type='checkbox' checked={group.defaultOpen} />
+              <div class='collapse-title min-h-0 py-3 text-sm font-medium text-base-content/80'>
                 {group.legend}
               </div>
-              <div class="collapse-content">
-                <div class="flex flex-wrap gap-2 pt-1">
+              <div class='collapse-content'>
+                <div class='flex flex-wrap gap-2 pt-1'>
                   {group.options.map((value) => (
-                    <label class="cursor-pointer">
+                    <label class='cursor-pointer'>
                       <input
-                        type="checkbox"
-                        class="peer sr-only"
+                        type='checkbox'
+                        class='peer sr-only'
                         data-facet-group={group.key}
                         data-facet-value={value}
                       />
-                      <span class="badge peer-checked:badge-primary flex min-h-11 items-center gap-1 border border-base-300 px-3 text-sm peer-checked:border-primary">
+                      <span class='badge peer-checked:badge-primary flex min-h-11 items-center gap-1 border border-base-300 px-3 text-sm peer-checked:border-primary'>
                         {value}
-                        <span class="text-xs opacity-60" data-count-for={`${group.key}:${value}`}>
+                        <span
+                          class='text-xs opacity-60'
+                          data-count-for={`${group.key}:${value}`}
+                        >
                           ({group.count(value)})
                         </span>
                       </span>
@@ -165,7 +239,11 @@ const facetGroups = [
     </div>
   </dialog>
 
-  <script type="application/json" id="diseases-data" set:html={JSON.stringify(diseases)} />
+  <script
+    type='application/json'
+    id='diseases-data'
+    set:html={JSON.stringify(diseases)}
+  />
 
   <script is:inline>
     (function () {
@@ -181,7 +259,7 @@ const facetGroups = [
       var filterDialog = document.getElementById("filter-dialog");
       var filterClose = document.getElementById("filter-close");
       var checkboxes = Array.prototype.slice.call(
-        document.querySelectorAll("[data-facet-group]")
+        document.querySelectorAll("[data-facet-group]"),
       );
 
       var pagefind = null;
@@ -214,7 +292,7 @@ const facetGroups = [
 
       function updateCount(group, value, count) {
         var el = document.querySelector(
-          '[data-count-for="' + group + ":" + value + '"]'
+          '[data-count-for="' + group + ":" + value + '"]',
         );
         if (el) el.textContent = count != null ? "(" + count + ")" : "";
       }
@@ -225,9 +303,14 @@ const facetGroups = [
           return sum + filters[g].length;
         }, 0);
         var resultText =
-          currentItems.length + " result" + (currentItems.length === 1 ? "" : "s");
+          currentItems.length +
+          " result" +
+          (currentItems.length === 1 ? "" : "s");
         filterTriggerLabel.textContent =
-          "Filters" + (activeCount ? " (" + activeCount + " active)" : "") + " · " + resultText;
+          "Filters" +
+          (activeCount ? " (" + activeCount + " active)" : "") +
+          " · " +
+          resultText;
       }
 
       // Renders one removable pill per checked facet checkbox, derived
@@ -251,10 +334,18 @@ const facetGroups = [
           .map(function (p) {
             return (
               '<button type="button" class="badge badge-outline gap-1.5 pr-2" data-remove-filter ' +
-              'data-facet-group="' + p.group + '" data-facet-value="' + p.value + '">' +
-              '<span>' + p.value + "</span>" +
+              'data-facet-group="' +
+              p.group +
+              '" data-facet-value="' +
+              p.value +
+              '">' +
+              "<span>" +
+              p.value +
+              "</span>" +
               '<span aria-hidden="true">×</span>' +
-              '<span class="sr-only">Remove ' + p.value + " filter</span>" +
+              '<span class="sr-only">Remove ' +
+              p.value +
+              " filter</span>" +
               "</button>"
             );
           })
@@ -263,25 +354,30 @@ const facetGroups = [
         if (pills.length > 1) {
           html +=
             '<button type="button" id="clear-filters-btn" ' +
-            'class="text-xs text-base-content/70 underline hover:text-primary">' +
+            'class="text-xs text-base-content/95 underline hover:text-primary">' +
             "Clear all</button>";
         }
 
         activeFiltersContainer.innerHTML = html;
 
-        activeFiltersContainer.querySelectorAll("[data-remove-filter]").forEach(function (btn) {
-          btn.addEventListener("click", function () {
-            var group = btn.dataset.facetGroup;
-            var value = btn.dataset.facetValue;
-            var cb = checkboxes.filter(function (c) {
-              return c.dataset.facetGroup === group && c.dataset.facetValue === value;
-            })[0];
-            if (cb) {
-              cb.checked = false;
-              runSearch();
-            }
+        activeFiltersContainer
+          .querySelectorAll("[data-remove-filter]")
+          .forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              var group = btn.dataset.facetGroup;
+              var value = btn.dataset.facetValue;
+              var cb = checkboxes.filter(function (c) {
+                return (
+                  c.dataset.facetGroup === group &&
+                  c.dataset.facetValue === value
+                );
+              })[0];
+              if (cb) {
+                cb.checked = false;
+                runSearch();
+              }
+            });
           });
-        });
 
         var clearBtn = document.getElementById("clear-filters-btn");
         if (clearBtn) {
@@ -302,10 +398,10 @@ const facetGroups = [
           '" class="font-display text-lg font-medium hover:text-primary">' +
           d.title +
           "</a>" +
-          '<p class="mt-1 text-sm text-base-content/70">' +
+          '<p class="mt-1 text-sm text-base-content/95">' +
           (d.excerpt || "") +
           "</p>" +
-          '<p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/70">' +
+          '<p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/95">' +
           (d.orphaCode ? "<span>" + d.orphaCode + "</span>" : "") +
           (d.system ? "<span>" + d.system + "</span>" : "") +
           (d.inheritance ? "<span>" + d.inheritance + "</span>" : "") +
@@ -320,12 +416,14 @@ const facetGroups = [
       // runSearch's job. This just handles what's already been computed.
       function renderPage() {
         resultCount.textContent =
-          currentItems.length + " result" + (currentItems.length === 1 ? "" : "s");
+          currentItems.length +
+          " result" +
+          (currentItems.length === 1 ? "" : "s");
         updateFilterTriggerLabel();
 
         if (currentItems.length === 0) {
           resultsList.innerHTML =
-            '<li class="py-8 text-sm text-base-content/70">' +
+            '<li class="py-8 text-sm text-base-content/95">' +
             "No matches in this prototype's sample — that reflects what's in the " +
             "current sample, not whether the disease is real. Try a different " +
             "spelling, a related symptom, or fewer filters." +
@@ -341,13 +439,19 @@ const facetGroups = [
         if (remaining > 0) {
           var nextBatch = Math.min(PAGE_SIZE, remaining);
           showMoreContainer.innerHTML =
-            '<button type="button" id="show-more-btn" class="w-full rounded-field border border-base-300 py-2 text-sm text-base-content/70 transition-colors hover:border-primary hover:text-primary">' +
-            "Show " + nextBatch + " more (" + remaining + " left)" +
+            '<button type="button" id="show-more-btn" class="w-full rounded-field border border-base-300 py-2 text-sm text-base-content/95 transition-colors hover:border-primary hover:text-primary">' +
+            "Show " +
+            nextBatch +
+            " more (" +
+            remaining +
+            " left)" +
             "</button>";
-          document.getElementById("show-more-btn").addEventListener("click", function () {
-            visibleCount += PAGE_SIZE;
-            renderPage();
-          });
+          document
+            .getElementById("show-more-btn")
+            .addEventListener("click", function () {
+              visibleCount += PAGE_SIZE;
+              renderPage();
+            });
         } else {
           showMoreContainer.innerHTML = "";
         }
@@ -375,37 +479,41 @@ const facetGroups = [
         renderActiveFilters();
 
         if (pagefind) {
-          return pagefind.search(query || null, { filters: filters }).then(function (search) {
-            // No slice here — loading .data() for every match (capped in
-            // the low hundreds at most, given the dataset size) is fast
-            // since Pagefind reads from its already-loaded local index.
-            // Paging into that full set happens in renderPage, client-side.
-            return Promise.all(
-              search.results.map(function (r) {
-                return r.data();
-              })
-            ).then(function (results) {
-              currentItems = results.map(function (d) {
-                return {
-                  url: d.url,
-                  title: (d.meta && d.meta.title) || d.url,
-                  excerpt: (d.meta && d.meta.note) || d.excerpt,
-                  orphaCode: d.meta && d.meta.orphaCode,
-                  system: d.meta && d.meta.system,
-                  inheritance: d.meta && d.meta.inheritance,
-                };
-              });
-              currentItems.sort(byTitle);
-              visibleCount = PAGE_SIZE;
-              renderPage();
+          return pagefind
+            .search(query || null, { filters: filters })
+            .then(function (search) {
+              // No slice here — loading .data() for every match (capped in
+              // the low hundreds at most, given the dataset size) is fast
+              // since Pagefind reads from its already-loaded local index.
+              // Paging into that full set happens in renderPage, client-side.
+              return Promise.all(
+                search.results.map(function (r) {
+                  return r.data();
+                }),
+              ).then(function (results) {
+                currentItems = results.map(function (d) {
+                  return {
+                    url: d.url,
+                    title: (d.meta && d.meta.title) || d.url,
+                    excerpt: (d.meta && d.meta.note) || d.excerpt,
+                    orphaCode: d.meta && d.meta.orphaCode,
+                    system: d.meta && d.meta.system,
+                    inheritance: d.meta && d.meta.inheritance,
+                  };
+                });
+                currentItems.sort(byTitle);
+                visibleCount = PAGE_SIZE;
+                renderPage();
 
-              Object.keys(search.filters || {}).forEach(function (group) {
-                Object.entries(search.filters[group]).forEach(function (entry) {
-                  updateCount(group, entry[0], entry[1]);
+                Object.keys(search.filters || {}).forEach(function (group) {
+                  Object.entries(search.filters[group]).forEach(
+                    function (entry) {
+                      updateCount(group, entry[0], entry[1]);
+                    },
+                  );
                 });
               });
             });
-          });
         }
 
         if (fallbackData) {
@@ -457,38 +565,64 @@ const facetGroups = [
           // Simplified dev-only counts: reflects the query alone, not
           // combined with other active facets. The real Pagefind API
           // (used in the built site) computes these properly.
-          Array.from(new Set(fallbackData.map(function (d) { return d.system; }))).forEach(function (s) {
+          Array.from(
+            new Set(
+              fallbackData.map(function (d) {
+                return d.system;
+              }),
+            ),
+          ).forEach(function (s) {
             updateCount(
               "System",
               s,
-              fallbackData.filter(function (d) { return d.system === s && matchesQuery(d); }).length
+              fallbackData.filter(function (d) {
+                return d.system === s && matchesQuery(d);
+              }).length,
             );
           });
           Array.from(
-            new Set(fallbackData.reduce(function (acc, d) { return acc.concat(d.inheritance); }, []))
+            new Set(
+              fallbackData.reduce(function (acc, d) {
+                return acc.concat(d.inheritance);
+              }, []),
+            ),
           ).forEach(function (i) {
             updateCount(
               "Inheritance",
               i,
-              fallbackData.filter(function (d) { return d.inheritance.indexOf(i) !== -1 && matchesQuery(d); })
-                .length
+              fallbackData.filter(function (d) {
+                return d.inheritance.indexOf(i) !== -1 && matchesQuery(d);
+              }).length,
             );
           });
           Array.from(
-            new Set(fallbackData.reduce(function (acc, d) { return acc.concat(d.ageOfOnset); }, []))
+            new Set(
+              fallbackData.reduce(function (acc, d) {
+                return acc.concat(d.ageOfOnset);
+              }, []),
+            ),
           ).forEach(function (a) {
             updateCount(
               "AgeOfOnset",
               a,
-              fallbackData.filter(function (d) { return d.ageOfOnset.indexOf(a) !== -1 && matchesQuery(d); })
-                .length
+              fallbackData.filter(function (d) {
+                return d.ageOfOnset.indexOf(a) !== -1 && matchesQuery(d);
+              }).length,
             );
           });
-          Array.from(new Set(fallbackData.map(function (d) { return d.rarity; }))).forEach(function (r) {
+          Array.from(
+            new Set(
+              fallbackData.map(function (d) {
+                return d.rarity;
+              }),
+            ),
+          ).forEach(function (r) {
             updateCount(
               "Rarity",
               r,
-              fallbackData.filter(function (d) { return d.rarity === r && matchesQuery(d); }).length
+              fallbackData.filter(function (d) {
+                return d.rarity === r && matchesQuery(d);
+              }).length,
             );
           });
         }
@@ -498,17 +632,20 @@ const facetGroups = [
       function init() {
         import(/* @vite-ignore */ "/pagefind/pagefind.js")
           .then(function (mod) {
-            return mod.init().then(function () {
-              return mod.filters();
-            }).then(function () {
-              pagefind = mod;
-            });
+            return mod
+              .init()
+              .then(function () {
+                return mod.filters();
+              })
+              .then(function () {
+                pagefind = mod;
+              });
           })
           .catch(function (e) {
             console.warn(
               "[rare-disease-search] Pagefind index not found — this is expected under `astro dev`. " +
                 "Run `npm run build` to generate the search index. Falling back to an in-memory demo search.",
-              e
+              e,
             );
             var dataEl = document.getElementById("diseases-data");
             fallbackData = JSON.parse((dataEl && dataEl.textContent) || "[]");
