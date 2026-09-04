@@ -167,6 +167,34 @@ doesn't exist yet and falls back to a simple client-side filter over the
 generated dataset — good enough to develop against, but not representative
 of real search relevance/ranking.
 
+## Accessibility testing
+
+```sh
+npm run test:a11y
+```
+
+Runs [`tests/a11y.spec.ts`](tests/a11y.spec.ts) via Playwright +
+`@axe-core/playwright`: an automated scan of the search page and one
+representative disease detail page, in both the light and dark theme,
+against WCAG 2.0/2.1 **A and AA** rules (not AAA — that tier's 7:1 contrast
+requirement, vs. AA's 4.5:1, is generally treated as an aspirational
+stretch goal rather than a blanket target). `playwright.config.ts` starts
+(or reuses) the dev server automatically, so no separate setup is needed
+beyond `npm install` and `npx playwright install chromium` once.
+
+This only covers what axe can check automatically — real contrast ratios,
+missing labels/alt text, ARIA misuse, and similar. It's not a substitute
+for manual checks like keyboard navigation, screen reader testing, or
+reduced-motion/zoom behavior.
+
+**Currently red:** the light theme fails `color-contrast` on both pages
+tested. `text-base-content/60` (muted secondary text — result counts,
+per-result metadata, footer, detail-page labels) resolves to a 3.97:1
+ratio against the light theme's background, under the 4.5:1 AA minimum
+for normal-size text. `text-base-content/70`, used for excerpt/intro text,
+does pass. The dark theme has no violations under this rule set. Not
+fixed yet as of this commit.
+
 ## Design
 
 A custom daisyUI theme (not a default preset) — warm paper background,
