@@ -10,7 +10,8 @@
     "build": "astro build && pagefind --site dist",
     "preview": "npm run build && astro preview",
     "fetch-data": "node scripts/fetch-orphadata.mjs",
-    "astro": "astro"
+    "astro": "astro",
+    "test:a11y": "playwright test"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
@@ -23,6 +24,8 @@
     "esbuild": true
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.62.1",
     "fast-xml-parser": "^5.11.1",
     "pagefind": "^1.5.2",
     "playwright": "^1.62.1"
