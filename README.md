@@ -187,13 +187,14 @@ missing labels/alt text, ARIA misuse, and similar. It's not a substitute
 for manual checks like keyboard navigation, screen reader testing, or
 reduced-motion/zoom behavior.
 
-**Currently red:** the light theme fails `color-contrast` on both pages
-tested. `text-base-content/60` (muted secondary text — result counts,
-per-result metadata, footer, detail-page labels) resolves to a 3.97:1
-ratio against the light theme's background, under the 4.5:1 AA minimum
-for normal-size text. `text-base-content/70`, used for excerpt/intro text,
-does pass. The dark theme has no violations under this rule set. Not
-fixed yet as of this commit.
+**Currently green** (4/4). The suite initially caught a real issue: the
+light theme's muted secondary text (result counts, per-result metadata,
+footer, detail-page labels) used `text-base-content/60`, which resolves to
+a 3.97:1 contrast ratio against the light theme's background — under the
+4.5:1 AA minimum for normal-size text. Fixed by moving those to `/70`
+(already used elsewhere for excerpt/intro text), which clears AA with
+real margin (5.39:1). The dark theme had no violations under this rule
+set to begin with.
 
 ## Design
 
