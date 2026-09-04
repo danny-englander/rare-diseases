@@ -205,8 +205,16 @@ any time inline text sits next to a tag or expression here.
 - If typo tolerance matters (patients often misspell disease/symptom
   names), consider swapping Pagefind for **Orama** — same zero-backend,
   free approach, but with real fuzzy/Levenshtein matching
-- Collapse the facet sidebar into a `<details>`/drawer on mobile — right
-  now it's always expanded, which pushes results down on small screens
+- **Phenotype (symptom) filtering as a sixth facet.** The data already
+  exists — `symptoms: string[]` on each `Disease`, sourced from
+  `en_product4.xml` — but it's only used for free-text search matching
+  today. Checked in the current 920-disease sample: 1,277 unique symptom
+  terms, and 729 of those appear on exactly one disease — far too
+  high-cardinality for a flat pill list like the other four facets. A
+  version of this would need a searchable/typeahead facet (e.g. the top
+  20–30 most-common terms as pills by default, with a search-within-facet
+  input to reach the rest) rather than the "show all values" pattern the
+  existing facets use.
 - Cite Orphadata per their citation guidelines if this goes further
   ("Orphadata: Free access data from Orphanet. © INSERM 1999. Available
   on https://www.orphadata.com. Data version [XML data version].")
