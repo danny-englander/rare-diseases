@@ -55,10 +55,12 @@
 
   /* Tailwind slate scale (900/800/700/600) instead of the original warm
      charcoal — cooler, less brown. */
-  --color-base-100: oklch(22.5% 0.011 216.9); /* slate-900 */
-  --color-base-200: oklch(27.5% 0.011 216.9); /* slate-800 */
-  --color-base-300: oklch(33.5% 0.011 216.9); /* slate-700 */
+  --color-base-100: oklch(23.5% 0.013 285.805); /* slate-900 */
+  --color-base-200: oklch(27.5% 0.013 285.805); /* slate-800 */
+  --color-base-300: oklch(33.5% 0.013 285.805); /* slate-700 */
   --color-base-content: #f1f5f9; /* slate-100, cooled to match */
+
+  /* oklch(37% 0.013 285.805) */
 
   --color-primary: #74a89f;
   --color-primary-content: #12201d;
