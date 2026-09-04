@@ -20,6 +20,38 @@ const sortedDiseases = [...diseases].sort((a, b) =>
   a.name.localeCompare(b.name),
 );
 
+// Each facet group gets its own daisyUI semantic color, consistently
+// applied to its pills (when selected), its header dot, and its chips
+// in the active-filters row — so a chip's color alone tells you which
+// group it came from, even with the panel closed. Written out in full
+// (not built with template-literal interpolation like `badge-${color}`)
+// because Tailwind's class scanner needs complete, literal class name
+// strings somewhere in the source to generate their CSS — see the
+// GROUP_COLORS mirror in the client script below, which references
+// these same four color names by group key.
+const FACET_COLORS = {
+  primary: {
+    dot: "bg-primary",
+    pill: "peer-checked:badge-primary peer-checked:border-primary",
+    chip: "badge-primary",
+  },
+  secondary: {
+    dot: "bg-secondary",
+    pill: "peer-checked:badge-secondary peer-checked:border-secondary",
+    chip: "badge-secondary",
+  },
+  accent: {
+    dot: "bg-accent",
+    pill: "peer-checked:badge-accent peer-checked:border-accent",
+    chip: "badge-accent",
+  },
+  info: {
+    dot: "bg-info",
+    pill: "peer-checked:badge-info peer-checked:border-info",
+    chip: "badge-info",
+  },
+} as const;
+
 // Drives the nested collapse groups inside the filter panel. The first
 // two (most commonly filtered) start expanded; the rest start collapsed
 // so the panel doesn't open to a wall of facets.
@@ -29,6 +61,7 @@ const facetGroups = [
     legend: "Body system",
     options: systems,
     defaultOpen: true,
+    color: "primary" as const,
     count: (v: string) => diseases.filter((d) => d.system === v).length,
   },
   {
@@ -36,6 +69,7 @@ const facetGroups = [
     legend: "Inheritance pattern",
     options: inheritancePatterns,
     defaultOpen: true,
+    color: "secondary" as const,
     count: (v: string) =>
       diseases.filter((d) => d.inheritance.includes(v)).length,
   },
@@ -44,6 +78,7 @@ const facetGroups = [
     legend: "Typical age of onset",
     options: ageOfOnsetOptions,
     defaultOpen: false,
+    color: "accent" as const,
     count: (v: string) =>
       diseases.filter((d) => d.ageOfOnset.includes(v)).length,
   },
@@ -52,6 +87,7 @@ const facetGroups = [
     legend: "Rarity",
     options: rarityOptions,
     defaultOpen: false,
+    color: "info" as const,
     count: (v: string) => diseases.filter((d) => d.rarity === v).length,
   },
 ];
@@ -206,7 +242,11 @@ const facetGroups = [
           facetGroups.map((group) => (
             <div class='collapse-arrow collapse border border-base-300 bg-base-100'>
               <input type='checkbox' checked={group.defaultOpen} />
-              <div class='collapse-title min-h-0 py-3 text-sm font-medium text-base-content/80'>
+              <div class='collapse-title flex min-h-0 items-center gap-2 py-3 text-sm font-medium text-base-content/80'>
+                <span
+                  class={`h-2 w-2 shrink-0 rounded-full ${FACET_COLORS[group.color].dot}`}
+                  aria-hidden='true'
+                ></span>
                 {group.legend}
               </div>
               <div class='collapse-content'>
@@ -219,7 +259,7 @@ const facetGroups = [
                         data-facet-group={group.key}
                         data-facet-value={value}
                       />
-                      <span class='badge peer-checked:badge-primary flex min-h-11 items-center gap-1 border border-base-300 px-3 text-sm peer-checked:border-primary'>
+                      <span class={`badge flex min-h-11 items-center gap-1 border border-base-300 px-3 text-sm ${FACET_COLORS[group.color].pill}`}>
                         {value}
                         <span
                           class='text-xs opacity-60'
@@ -248,6 +288,17 @@ const facetGroups = [
   <script is:inline>
     (function () {
       var PAGE_SIZE = 20;
+
+      // Mirrors the `color` field on each facetGroups entry in the
+      // frontmatter above — the active-filter chips are built here in
+      // plain client JS (not by Astro), so they need their own copy of
+      // the group-to-color mapping to stay in sync with the pills.
+      var GROUP_COLORS = {
+        System: "primary",
+        Inheritance: "secondary",
+        AgeOfOnset: "accent",
+        Rarity: "info",
+      };
 
       var searchInput = document.getElementById("search-input");
       var resultsList = document.getElementById("results-list");
@@ -332,8 +383,11 @@ const facetGroups = [
 
         var html = pills
           .map(function (p) {
+            var color = GROUP_COLORS[p.group] || "neutral";
             return (
-              '<button type="button" class="badge badge-outline gap-1.5 pr-2" data-remove-filter ' +
+              '<button type="button" class="badge badge-' +
+              color +
+              ' gap-1.5 pr-2" data-remove-filter ' +
               'data-facet-group="' +
               p.group +
               '" data-facet-value="' +
