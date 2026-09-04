@@ -57,7 +57,7 @@ const facetGroups = [
         <p class="mt-1 text-base-content/70">
           Search by name, synonym, or symptom. Filter by body system or inheritance pattern.
         </p>
-        <p class="mt-3 max-w-2xl border-l-2 border-base-300 pl-3 text-sm text-base-content/60">
+        <p class="mt-3 max-w-2xl border-l-2 border-base-300 pl-3 text-sm text-base-content/70">
           This is a working prototype of the search interface, not a comprehensive database
           — it currently covers a sample of {diseases.length} of Orphadata's {ORPHADATA_TOTAL.toLocaleString()} catalogued
           rare diseases. Not finding something here doesn't mean it isn't real or rare.
@@ -95,7 +95,7 @@ const facetGroups = [
 
       <div id="active-filters" class="mt-3 flex flex-wrap items-center gap-2"></div>
 
-      <p id="result-count" class="mt-6 text-sm text-base-content/60" aria-live="polite">
+      <p id="result-count" class="mt-6 text-sm text-base-content/70" aria-live="polite">
         {diseases.length} results
       </p>
       <ul id="results-list" class="mt-2 divide-y divide-base-300">
@@ -106,7 +106,7 @@ const facetGroups = [
                 {d.name}
               </a>
               <p class="mt-1 text-sm text-base-content/70">{d.note}</p>
-              <p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/60">
+              <p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/70">
                 <span>{d.orphaCode}</span>
                 <span>{d.system}</span>
                 <span>{d.inheritance.join(", ")}</span>
@@ -263,7 +263,7 @@ const facetGroups = [
         if (pills.length > 1) {
           html +=
             '<button type="button" id="clear-filters-btn" ' +
-            'class="text-xs text-base-content/60 underline hover:text-primary">' +
+            'class="text-xs text-base-content/70 underline hover:text-primary">' +
             "Clear all</button>";
         }
 
@@ -305,7 +305,7 @@ const facetGroups = [
           '<p class="mt-1 text-sm text-base-content/70">' +
           (d.excerpt || "") +
           "</p>" +
-          '<p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/60">' +
+          '<p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/70">' +
           (d.orphaCode ? "<span>" + d.orphaCode + "</span>" : "") +
           (d.system ? "<span>" + d.system + "</span>" : "") +
           (d.inheritance ? "<span>" + d.inheritance + "</span>" : "") +
@@ -325,7 +325,7 @@ const facetGroups = [
 
         if (currentItems.length === 0) {
           resultsList.innerHTML =
-            '<li class="py-8 text-sm text-base-content/60">' +
+            '<li class="py-8 text-sm text-base-content/70">' +
             "No matches in this prototype's sample — that reflects what's in the " +
             "current sample, not whether the disease is real. Try a different " +
             "spelling, a related symptom, or fewer filters." +

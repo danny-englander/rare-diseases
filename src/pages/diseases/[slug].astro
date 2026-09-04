@@ -17,7 +17,7 @@ const { disease } = Astro.props;
     <a href="/" data-pagefind-ignore class="text-sm text-primary hover:underline">&larr; Back to search</a>
 
     <article class="mt-6" data-pagefind-body>
-      <p class="text-sm text-base-content/60" data-pagefind-meta={`orphaCode:${disease.orphaCode}`}>
+      <p class="text-sm text-base-content/70" data-pagefind-meta={`orphaCode:${disease.orphaCode}`}>
         {disease.orphaCode}
       </p>
       <h1 class="font-display mt-1 text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -25,13 +25,13 @@ const { disease } = Astro.props;
       </h1>
       {
         disease.synonyms.length > 0 && (
-          <p class="mt-2 text-base-content/60">Also called {disease.synonyms.join(", ")}</p>
+          <p class="mt-2 text-base-content/70">Also called {disease.synonyms.join(", ")}</p>
         )
       }
 
       <dl class="mt-8 grid grid-cols-1 gap-x-8 gap-y-4 border-y border-base-300 py-6 sm:grid-cols-2">
         <div>
-          <dt class="text-xs text-base-content/60">Body system</dt>
+          <dt class="text-xs text-base-content/70">Body system</dt>
           <dd
             class="mt-1"
             data-pagefind-filter={`System:${disease.system}`}
@@ -41,7 +41,7 @@ const { disease } = Astro.props;
           </dd>
         </div>
         <div>
-          <dt class="text-xs text-base-content/60">Inheritance pattern</dt>
+          <dt class="text-xs text-base-content/70">Inheritance pattern</dt>
           <dd class="mt-1" data-pagefind-meta={`inheritance:${disease.inheritance.join(", ")}`}>
             {
               disease.inheritance.map((pattern, i) => (
@@ -54,7 +54,7 @@ const { disease } = Astro.props;
           </dd>
         </div>
         <div>
-          <dt class="text-xs text-base-content/60">Typical age of onset</dt>
+          <dt class="text-xs text-base-content/70">Typical age of onset</dt>
           <dd class="mt-1" data-pagefind-meta={`ageOfOnset:${disease.ageOfOnset.join(", ")}`}>
             {
               disease.ageOfOnset.map((onset, i) => (
@@ -67,13 +67,13 @@ const { disease } = Astro.props;
           </dd>
         </div>
         <div>
-          <dt class="text-xs text-base-content/60">Estimated prevalence</dt>
+          <dt class="text-xs text-base-content/70">Estimated prevalence</dt>
           <dd class="mt-1" data-pagefind-meta={`prevalence:${disease.prevalence}`}>
             {disease.prevalence}
           </dd>
         </div>
         <div>
-          <dt class="text-xs text-base-content/60">Rarity class</dt>
+          <dt class="text-xs text-base-content/70">Rarity class</dt>
           <dd
             class="mt-1"
             data-pagefind-filter={`Rarity:${disease.rarity}`}
@@ -89,7 +89,7 @@ const { disease } = Astro.props;
       </p>
 
       <div class="mt-8">
-        <h2 class="text-sm font-medium text-base-content/60">Common signs</h2>
+        <h2 class="text-sm font-medium text-base-content/70">Common signs</h2>
         <ul class="mt-3 flex flex-wrap gap-2">
           {
             disease.symptoms.map((symptom) => (
