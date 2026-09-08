@@ -1,4 +1,5 @@
 ---
+import { Icon } from "astro-icon/components";
 import Layout from "../layouts/Layout.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
 import {
@@ -106,25 +107,27 @@ const facetGroups = [
           Search by name, synonym, or symptom. Filter by body system or
           inheritance pattern.
         </p>
-        <div
-          class='collapse-arrow collapse mt-3 w-full border border-base-content bg-base-100'
-        >
-          <input type='checkbox' aria-label='What is this?' />
-          <div class='collapse-title min-h-0 py-2 text-sm font-medium text-base-content/80'>
-            What is this?
-          </div>
-          <div class='collapse-content'>
-            <p class='text-sm text-base-content/95'>
-              This is a working prototype of the search interface, not a
-              comprehensive database — it currently covers a sample of {
-                diseases.length
-              } of Orphadata's {ORPHADATA_TOTAL.toLocaleString()} catalogued rare diseases.
-              Not finding something here doesn't mean it isn't real or rare.
-            </p>
-          </div>
-        </div>
       </div>
       <ThemeToggle />
+    </div>
+
+    <div
+      class='collapse-arrow collapse mt-3 w-full border border-dotted border-base-content bg-base-100'
+    >
+      <input type='checkbox' aria-label='What is this?' />
+      <div class='collapse-title flex min-h-0 items-center gap-2 py-2 text-sm font-medium text-base-content/80'>
+        <Icon name='material-symbols:help-outline' class='h-4 w-4 shrink-0' />
+        What is this?
+      </div>
+      <div class='collapse-content'>
+        <p class='text-sm text-base-content/95'>
+          This is a working prototype of the search interface, not a
+          comprehensive database — it currently covers a sample of {
+            diseases.length
+          } of Orphadata's {ORPHADATA_TOTAL.toLocaleString()} catalogued rare diseases.
+          Not finding something here doesn't mean it isn't real or rare.
+        </p>
+      </div>
     </div>
 
     <div class='mx-auto mt-8'>
