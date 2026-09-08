@@ -55,8 +55,9 @@ isn't alphabetical or clinically meaningful, so a capped sample can easily
 miss a specific disease you want included. `PINNED_CODES` in
 `fetch-orphadata.mjs` is a set of ORPHAcodes that are always pulled in
 regardless of the cap — currently Rippling muscle disease (97238), Rippling
-muscle disease with myasthenia gravis (206575), and Myasthenia gravis (589).
-Add more codes there as needed.
+muscle disease with myasthenia gravis (206575), Myasthenia gravis (589), and
+Adult-onset cervical dystonia, DYT23 type (420492). Add more codes there as
+needed.
 
 To refresh the dataset (Orphadata itself only updates twice a year, so this
 doesn't need to run often):

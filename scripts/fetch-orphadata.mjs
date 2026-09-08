@@ -59,6 +59,7 @@ const PINNED_CODES = new Set([
   "97238", // Rippling muscle disease
   "206575", // Rippling muscle disease with myasthenia gravis
   "589", // Myasthenia gravis
+  "420492", // Adult-onset cervical dystonia, DYT23 type
 ]);
 
 const BASE = "https://www.orphadata.com/data";

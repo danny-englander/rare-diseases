@@ -2,6 +2,33 @@
   "dataVersion": "2026-06-23",
   "diseases": [
     {
+      "slug": "adult-onset-cervical-dystonia-dyt23-type",
+      "name": "Adult-onset cervical dystonia, DYT23 type",
+      "synonyms": [
+        "DYT23",
+        "Dystonia 23"
+      ],
+      "orphaCode": "ORPHA:420492",
+      "system": "Neurological diseases",
+      "inheritance": [
+        "Autosomal dominant"
+      ],
+      "ageOfOnset": [
+        "Adult"
+      ],
+      "prevalence": "<1 / 1 000 000 (Worldwide)",
+      "rarity": "<1 / 1 000 000",
+      "note": "ORPHA:420492 is classified under \"Neurological diseases\" in the Orphanet nomenclature.",
+      "symptoms": [
+        "Torticollis",
+        "Gait disturbance",
+        "Myoclonus",
+        "Dysphonia",
+        "Unsteady gait",
+        "Head tremor"
+      ]
+    },
+    {
       "slug": "rippling-muscle-disease",
       "name": "Rippling muscle disease",
       "synonyms": [],
@@ -4613,30 +4640,6 @@
       "rarity": "<1 / 1 000 000",
       "note": "ORPHA:251674 is classified under \"Neurological diseases\" in the Orphanet nomenclature.",
       "symptoms": []
-    },
-    {
-      "slug": "li-fraumeni-syndrome",
-      "name": "Li-Fraumeni syndrome",
-      "synonyms": [],
-      "orphaCode": "ORPHA:524",
-      "system": "Neurological diseases",
-      "inheritance": [
-        "Autosomal dominant"
-      ],
-      "ageOfOnset": [
-        "All ages"
-      ],
-      "prevalence": "1-9 / 100 000 (United Kingdom)",
-      "rarity": "1-9 / 100 000",
-      "note": "ORPHA:524 is classified under \"Neurological diseases\" in the Orphanet nomenclature.",
-      "symptoms": [
-        "Neoplasm",
-        "Breast carcinoma",
-        "Leukemia",
-        "Lymphoma",
-        "Osteosarcoma",
-        "Rhabdomyosarcoma"
-      ]
     },
     {
       "slug": "pmm2-cdg",
