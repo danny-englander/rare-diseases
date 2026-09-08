@@ -1,0 +1,25 @@
+---
+// Hexagon with a hole in the middle. One evenodd path (hex outer boundary +
+// circle inner boundary) so the hole is a true cut-out showing whatever is
+// behind it, rather than a filled circle painted over in a background
+// color that would go stale if the theme's background ever changes.
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg
+  class={className}
+  viewBox='0 0 32 32'
+  fill='currentColor'
+  xmlns='http://www.w3.org/2000/svg'
+  aria-hidden='true'
+>
+  <path
+    fill-rule='evenodd'
+    clip-rule='evenodd'
+    d='M16 3 27.26 9.5 27.26 22.5 16 29 4.74 22.5 4.74 9.5Z M22 16A6 6 0 1 1 10 16A6 6 0 1 1 22 16Z'
+  ></path>
+</svg>

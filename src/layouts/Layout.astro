@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import Logo from "../components/Logo.astro";
 import { dataVersion } from "../data/diseases";
 
 interface Props {
@@ -41,7 +42,11 @@ const {
       <div
         class='mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6'
       >
-        <a href='/' class='font-display text-lg font-semibold tracking-tight'>
+        <a
+          href='/'
+          class='flex items-center gap-2 font-display text-lg font-semibold tracking-tight text-base-content'
+        >
+          <Logo class='h-[30px] w-[30px] text-primary md:h-[50px] md:w-[50px]' />
           Rare Disease Index
         </a>
         <a
