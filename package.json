@@ -14,8 +14,10 @@
     "test:a11y": "playwright test"
   },
   "dependencies": {
+    "@iconify-json/material-symbols": "^1.2.91",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.2.10",
+    "astro-icon": "^1.1.5",
     "daisyui": "^5.7.27",
     "tailwindcss": "^4.3.3",
     "theme-change": "^3.0.4"
