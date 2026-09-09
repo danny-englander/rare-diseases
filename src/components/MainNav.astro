@@ -1,0 +1,73 @@
+---
+import { Icon } from "astro-icon/components";
+
+const navItems = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+];
+---
+
+<button
+  type='button'
+  id='nav-trigger'
+  aria-haspopup='dialog'
+  aria-label='Open navigation menu'
+  class='btn btn-ghost btn-circle'
+>
+  <Icon name='material-symbols:menu' class='h-6 w-6' />
+</button>
+
+<dialog
+  id='nav-dialog'
+  aria-label='Site navigation'
+  class='m-0 h-dvh max-h-none w-dvw max-w-none items-start justify-end border-0 bg-transparent p-0'
+>
+  <div
+    class='flex h-full w-full max-w-xs flex-col bg-base-100 shadow-xl'
+  >
+    <div class='flex shrink-0 items-center justify-between border-b border-base-300 p-4'>
+      <span class='font-display text-xl font-semibold'>Menu</span>
+      <button
+        type='button'
+        id='nav-close'
+        aria-label='Close navigation menu'
+        class='btn btn-ghost btn-circle btn-sm'
+      >
+        <Icon name='material-symbols:close' class='h-5 w-5' />
+      </button>
+    </div>
+
+    <nav class='flex-1 overflow-y-auto p-2' aria-label='Main'>
+      <ul class='menu w-full text-base'>
+        {
+          navItems.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</dialog>
+
+<script is:inline>
+  (function () {
+    var trigger = document.getElementById("nav-trigger");
+    var dialog = document.getElementById("nav-dialog");
+    var closeBtn = document.getElementById("nav-close");
+    if (!trigger || !dialog || !closeBtn) return;
+
+    trigger.addEventListener("click", function () {
+      dialog.showModal();
+    });
+    closeBtn.addEventListener("click", function () {
+      dialog.close();
+    });
+    dialog.addEventListener("click", function (e) {
+      if (e.target === dialog) dialog.close();
+    });
+  })();
+</script>

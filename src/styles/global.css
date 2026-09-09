@@ -114,3 +114,13 @@ html {
 #filter-dialog::backdrop {
   background-color: rgb(0 0 0 / 0.5);
 }
+
+/* Site nav menu: a right-hand drawer, same <dialog> pattern as the filter
+   panel above. */
+#nav-dialog[open] {
+  display: flex;
+}
+
+#nav-dialog::backdrop {
+  background-color: rgb(0 0 0 / 0.5);
+}

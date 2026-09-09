@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Logo from "../components/Logo.astro";
+import MainNav from "../components/MainNav.astro";
 import { dataVersion } from "../data/diseases";
 
 interface Props {
@@ -39,30 +40,28 @@ const {
   </head>
   <body class='min-h-screen bg-base-100 text-base-content'>
     <header data-pagefind-ignore class='border-b border-base-300'>
-      <div
-        class='mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6'
-      >
-        <a
-          href='/'
-          class='flex items-center gap-2 font-display text-lg font-semibold tracking-tight text-base-content'
-        >
-          <Logo class='h-[30px] w-[30px] text-primary md:h-[50px] md:w-[50px]' />
-          Rare Disease Index
-        </a>
-        <a
-          href='https://www.orphadata.com/'
-          target='_blank'
-          rel='noopener'
-          class='hidden text-xs text-base-content/95 sm:block'
-        >
-          Data via Orphadata
-        </a>
+      <div class='mx-auto max-w-5xl px-4 pt-4 sm:px-6'>
+        <div class='flex items-center justify-between gap-4'>
+          <a
+            href='/'
+            class='flex items-center gap-2 font-display text-xl font-semibold tracking-tight text-base-content'
+          >
+            <Logo
+              class='h-[30px] w-[30px] text-primary md:h-[50px] md:w-[50px]'
+            />
+            Rare Disease Index
+          </a>
+          <MainNav />
+        </div>
+        <p class='mt-1 pb-3 text-sm text-base-content/80'>
+          A prototype search interface built on Orphanet data
+        </p>
       </div>
     </header>
     <slot />
     <footer data-pagefind-ignore class='mt-16 border-t border-base-300'>
       <div
-        class='mx-auto max-w-5xl space-y-2 px-4 py-8 text-xs text-base-content/95 sm:px-6'
+        class='mx-auto max-w-5xl space-y-2 px-4 py-8 text-sm text-base-content/95 sm:px-6'
       >
         <p>
           This is a prototype. Disease summaries are simplified and not a
