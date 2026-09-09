@@ -1,0 +1,129 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title='Contact' description='Get in touch about the Rare Disease Index prototype.'>
+  <main class='mx-auto max-w-5xl px-4 py-8 sm:px-6'>
+    <h1 class='font-display text-3xl font-semibold tracking-tight sm:text-4xl'>
+      Contact
+    </h1>
+    <p class='mt-1 text-base text-base-content/95'>
+      Questions, feedback, or spotted something wrong in the data? Send a
+      message below, or email{" "}
+      <a
+        href='mailto:dannyenglander311@gmail.com'
+        class='text-primary underline hover:text-yellow-400'
+        >dannyenglander311@gmail.com</a
+      > directly.
+    </p>
+
+    <div id='contact-form-wrap' class='mt-8 max-w-md'>
+      <form
+        id='contact-form'
+        name='contact'
+        method='POST'
+        action='/__forms.html'
+        autocomplete='off'
+        class='space-y-4'
+      >
+        <input type='hidden' name='form-name' value='contact' />
+        <p class='hidden'>
+          <label>
+            Don't fill this out if you're human:
+            <input name='bot-field' />
+          </label>
+        </p>
+
+        <div>
+          <label class='sr-only' for='your_name'>Name</label>
+          <input
+            class='input input-bordered w-full'
+            type='text'
+            name='your_name'
+            placeholder='Name'
+            id='your_name'
+            autocomplete='off'
+            required
+          />
+        </div>
+
+        <div>
+          <label class='sr-only' for='email'>Your email</label>
+          <input
+            class='input input-bordered w-full'
+            type='email'
+            placeholder='Your email'
+            name='email'
+            id='email'
+            autocomplete='off'
+            required
+          />
+        </div>
+
+        <div>
+          <label class='sr-only' for='message'>Your message</label>
+          <textarea
+            class='textarea textarea-bordered h-32 w-full'
+            rows='6'
+            name='message'
+            placeholder='Your message'
+            id='message'
+            autocomplete='off'
+            required></textarea>
+        </div>
+
+        <div>
+          <button type='submit' class='btn btn-primary'>Send message</button>
+        </div>
+      </form>
+    </div>
+
+    <p id='form-message' class='mt-8 max-w-md text-base text-base-content/95'></p>
+  </main>
+</Layout>
+
+<script>
+  const handleSubmit = (event: Event) => {
+    event.preventDefault();
+
+    const contactForm = event.target as HTMLFormElement;
+    const formData = new FormData(contactForm);
+    const body = new URLSearchParams();
+    for (const [key, value] of formData.entries()) {
+      if (typeof value === "string") {
+        body.append(key, value);
+      }
+    }
+
+    // Post to the static public/__forms.html file so Netlify Forms handles
+    // it — this endpoint exists purely for Netlify's build-time form
+    // detection and as a stable AJAX target for a static (no-adapter) site.
+    fetch("/__forms.html", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body.toString(),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Form submission failed");
+        }
+
+        const formMessage = document.getElementById("form-message");
+        const parentElement = document.getElementById("contact-form-wrap");
+        const childElement = document.getElementById("contact-form");
+        if (parentElement && childElement) {
+          parentElement.removeChild(childElement);
+        }
+        if (formMessage) {
+          formMessage.textContent =
+            "Message sent — thank you, I'll get back to you soon.";
+        }
+      })
+      .catch((error) => alert(error));
+  };
+
+  const form = document.querySelector("form");
+  if (form) {
+    form.addEventListener("submit", handleSubmit);
+  }
+</script>

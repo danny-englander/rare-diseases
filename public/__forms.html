@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Netlify Forms</title>
+  </head>
+  <body>
+    <!-- Static form for Netlify's build-time form detection and as the
+         AJAX POST target from src/pages/contact.astro. This site has no
+         backend, so submitting straight to the contact page's own URL
+         would have nowhere to go — Netlify intercepts POSTs to this exact
+         path/name combination and stores the submission instead. -->
+    <form
+      name="contact"
+      method="POST"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+      hidden
+    >
+      <input type="hidden" name="form-name" value="contact" />
+      <input name="bot-field" />
+      <input type="text" name="your_name" />
+      <input type="email" name="email" />
+      <textarea name="message"></textarea>
+    </form>
+  </body>
+</html>
