@@ -263,7 +263,7 @@ const facetGroups = [
     class='m-0 h-dvh max-h-none w-dvw max-w-none border-0 bg-transparent p-0 items-end justify-center md:items-stretch md:justify-end'
   >
     <div
-      class='flex max-h-[85dvh] w-full flex-col rounded-t-box bg-base-100 shadow-xl md:h-full md:max-h-none md:w-full md:max-w-sm md:rounded-t-none md:rounded-l-box'
+      class='filter-panel flex max-h-[85dvh] w-full flex-col rounded-t-box bg-base-100 shadow-xl md:h-full md:max-h-none md:w-full md:max-w-sm md:rounded-t-none md:rounded-l-box'
     >
       <div
         class='flex shrink-0 items-center justify-between border-b border-base-300 p-4'
@@ -367,6 +367,7 @@ const facetGroups = [
       var filterTriggerLabel = document.getElementById("filter-trigger-label");
       var filterDialog = document.getElementById("filter-dialog");
       var filterClose = document.getElementById("filter-close");
+      var filterPanel = filterDialog.querySelector(".filter-panel");
       var checkboxes = Array.prototype.slice.call(
         document.querySelectorAll("[data-facet-group]"),
       );
@@ -376,14 +377,42 @@ const facetGroups = [
       var currentItems = [];
       var visibleCount = PAGE_SIZE;
 
-      filterTrigger.addEventListener("click", function () {
+      function openFilterDialog() {
         filterDialog.showModal();
-      });
-      filterClose.addEventListener("click", function () {
-        filterDialog.close();
-      });
+        // Two rAFs guarantee the browser has painted the panel in its
+        // off-screen position (set via showModal) before the "open" class
+        // flips the transform — without this the slide-in transition
+        // sometimes gets skipped and it just appears already open.
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            filterDialog.classList.add("is-open");
+          });
+        });
+      }
+
+      function closeFilterDialog() {
+        if (!filterDialog.classList.contains("is-open")) return;
+        filterDialog.classList.remove("is-open");
+        filterPanel.addEventListener(
+          "transitionend",
+          function onEnd() {
+            filterPanel.removeEventListener("transitionend", onEnd);
+            filterDialog.close();
+          },
+          { once: true },
+        );
+      }
+
+      filterTrigger.addEventListener("click", openFilterDialog);
+      filterClose.addEventListener("click", closeFilterDialog);
       filterDialog.addEventListener("click", function (e) {
-        if (e.target === filterDialog) filterDialog.close();
+        if (e.target === filterDialog) closeFilterDialog();
+      });
+      // Animate the Escape-key close too, instead of letting the native
+      // "cancel" event close the dialog instantly.
+      filterDialog.addEventListener("cancel", function (e) {
+        e.preventDefault();
+        closeFilterDialog();
       });
 
       function getActiveFilters() {

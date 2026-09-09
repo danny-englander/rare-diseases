@@ -104,23 +104,65 @@ html {
   font-family: var(--font-serif);
 }
 
-/* Filter panel: a bottom sheet on mobile, a right-hand drawer from md: up.
-   Positioning/alignment lives in Tailwind classes on the element; this
-   just handles what a plain <dialog> doesn't expose as utilities. */
-#filter-dialog[open] {
-  display: flex;
-}
-
-#filter-dialog::backdrop {
-  background-color: rgb(0 0 0 / 0.5);
-}
-
-/* Site nav menu: a right-hand drawer, same <dialog> pattern as the filter
-   panel above. */
+/* Off-canvas panels (filter drawer, nav menu): both are a plain <dialog>
+   whose [open] attribute stays true for the whole slide-out close
+   animation — the matching inline script only calls .close() once the
+   panel's transitionend fires, removing it from the top layer at that
+   point instead of instantly. The `.is-open` class (added a frame after
+   showModal(), removed to kick off the close animation) drives the
+   slide + backdrop fade; [open] alone only controls display. */
+#filter-dialog[open],
 #nav-dialog[open] {
   display: flex;
 }
 
+#filter-dialog::backdrop,
 #nav-dialog::backdrop {
+  background-color: rgb(0 0 0 / 0);
+  transition: background-color 0.25s ease;
+}
+
+#filter-dialog.is-open::backdrop,
+#nav-dialog.is-open::backdrop {
   background-color: rgb(0 0 0 / 0.5);
+}
+
+/* Filter panel: a bottom sheet on mobile, a right-hand drawer from md: up. */
+.filter-panel {
+  transform: translateY(100%);
+  transition: transform 0.25s ease;
+}
+
+#filter-dialog.is-open .filter-panel {
+  transform: translateY(0);
+}
+
+@media (min-width: 768px) {
+  .filter-panel {
+    transform: translateX(100%);
+  }
+
+  #filter-dialog.is-open .filter-panel {
+    transform: translateX(0);
+  }
+}
+
+/* Site nav menu: a right-hand drawer, same <dialog> pattern as the filter
+   panel above. */
+.nav-panel {
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+}
+
+#nav-dialog.is-open .nav-panel {
+  transform: translateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #filter-dialog::backdrop,
+  #nav-dialog::backdrop,
+  .filter-panel,
+  .nav-panel {
+    transition: none;
+  }
 }
