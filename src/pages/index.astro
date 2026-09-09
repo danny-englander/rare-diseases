@@ -99,14 +99,18 @@ const facetGroups = [
     <div class='flex items-start justify-between gap-4'>
       <div class='flex-1'>
         <h1
-          class='font-display text-2xl font-semibold tracking-tight sm:text-3xl'
+          class='font-display text-3xl font-semibold tracking-tight sm:text-4xl'
         >
           Find a rare disease
         </h1>
-        <p class='mt-1 text-base-content/95'>
-          Search by name, synonym, or symptom. Filter by body system or
-          inheritance pattern.
-        </p>
+        <a
+          href='https://www.orphadata.com/'
+          target='_blank'
+          rel='noopener'
+          class='mt-1 inline-block text-sm text-primary underline hover:text-yellow-400'
+        >
+          Data via Orphadata
+        </a>
       </div>
       <ThemeToggle />
     </div>
@@ -115,12 +119,12 @@ const facetGroups = [
       class='collapse-arrow collapse mt-3 w-full border border-dotted border-base-content bg-base-100'
     >
       <input type='checkbox' aria-label='What is this?' />
-      <div class='collapse-title flex min-h-0 items-center gap-2 py-2 text-sm font-medium text-base-content/80'>
+      <div class='collapse-title flex min-h-0 items-center gap-2 py-2 text-base font-medium text-base-content/80'>
         <Icon name='material-symbols:help-outline' class='h-4 w-4 shrink-0' />
         What is this?
       </div>
       <div class='collapse-content'>
-        <p class='text-sm text-base-content/95'>
+        <p class='text-base text-base-content/95'>
           This is a working prototype of the search interface, not a
           comprehensive database — it currently covers a sample of {
             diseases.length
@@ -130,13 +134,53 @@ const facetGroups = [
       </div>
     </div>
 
+    <div
+      class='collapse-arrow collapse mt-3 w-full border border-dotted border-base-content bg-base-100'
+    >
+      <input type='checkbox' aria-label='How this search works' />
+      <div class='collapse-title flex min-h-0 items-center gap-2 py-2 text-base font-medium text-base-content/80'>
+        <Icon name='material-symbols:info-outline' class='h-4 w-4 shrink-0' />
+        How this search works
+      </div>
+      <div class='collapse-content'>
+        <ul class='list-disc space-y-1 pl-5 text-base text-base-content/95'>
+          <li>
+            As you type, results filter instantly — matching against each
+            disease's name, synonyms, and symptoms.
+          </li>
+          <li>
+            Open <span class='font-medium'>Filters</span> to fine-tune by body
+            system, inheritance pattern, age of onset, or rarity. Filters
+            combine with your search text and with each other.
+          </li>
+          <li>
+            Active filters show up as removable chips above the results —
+            click a chip's × to drop just that one.
+          </li>
+          <li>
+            <span class='font-medium'>Clear all</span> resets both the search
+            box and every filter at once.
+          </li>
+          <li>
+            Results load 20 at a time — use{" "}
+            <span class='font-medium'>Show more</span> to keep going.
+          </li>
+        </ul>
+      </div>
+    </div>
+
     <div class='mx-auto mt-8'>
+      <p class='border-t border-base-300 pt-4 text-base text-base-content/95'>
+        Search by name, synonym, or symptom. Filter by body system or
+        inheritance pattern.
+      </p>
+
       <label for='search-input' class='sr-only'>Search</label>
       <input
         id='search-input'
         type='search'
         placeholder='Search…'
-        class='input input-bordered min-h-11 w-full border-primary focus:border-yellow-400 focus:outline-none'
+        class='input input-bordered mt-3 min-h-11 w-full border-primary focus:border-yellow-400 focus:outline-none'
         autocomplete='off'
       />
 
@@ -184,7 +228,7 @@ const facetGroups = [
 
       <p
         id='result-count'
-        class='mt-6 text-sm text-base-content/95'
+        class='mt-6 text-base text-base-content/95'
         aria-live='polite'
       >
         {diseases.length} results
@@ -195,12 +239,12 @@ const facetGroups = [
             <li class='py-4'>
               <a
                 href={`/diseases/${d.slug}/`}
-                class='font-display text-lg font-medium hover:text-primary'
+                class='font-display text-xl font-medium hover:text-primary'
               >
                 {d.name}
               </a>
-              <p class='mt-1 text-sm text-base-content/95'>{d.note}</p>
-              <p class='mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/95'>
+              <p class='mt-1 text-base text-base-content/95'>{d.note}</p>
+              <p class='mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm text-base-content/95'>
                 <span>{d.orphaCode}</span>
                 <span>{d.system}</span>
                 <span>{d.inheritance.join(", ")}</span>
@@ -224,7 +268,7 @@ const facetGroups = [
       <div
         class='flex shrink-0 items-center justify-between border-b border-base-300 p-4'
       >
-        <h2 class='font-display text-lg font-semibold'>Filters</h2>
+        <h2 class='font-display text-xl font-semibold'>Filters</h2>
         <button
           type='button'
           id='filter-close'
@@ -256,7 +300,7 @@ const facetGroups = [
                 checked={group.defaultOpen}
                 aria-label={group.legend}
               />
-              <div class='collapse-title flex min-h-0 items-center gap-2 py-3 text-sm font-medium text-base-content/80'>
+              <div class='collapse-title flex min-h-0 items-center gap-2 py-3 text-base font-medium text-base-content/80'>
                 <span
                   class={`h-2 w-2 shrink-0 rounded-full ${FACET_COLORS[group.color].dot}`}
                   aria-hidden='true'
@@ -273,10 +317,10 @@ const facetGroups = [
                         data-facet-group={group.key}
                         data-facet-value={value}
                       />
-                      <span class={`badge flex min-h-11 items-center gap-1 border border-base-300 px-3 text-sm ${FACET_COLORS[group.color].pill}`}>
+                      <span class={`badge flex min-h-11 items-center gap-1 border border-base-300 px-3 text-base ${FACET_COLORS[group.color].pill}`}>
                         {value}
                         <span
-                          class='text-xs opacity-60'
+                          class='text-sm opacity-60'
                           data-count-for={`${group.key}:${value}`}
                         >
                           ({group.count(value)})
@@ -465,13 +509,13 @@ const facetGroups = [
           '<li class="py-4">' +
           '<a href="' +
           d.url +
-          '" class="font-display text-lg font-medium hover:text-primary">' +
+          '" class="font-display text-xl font-medium hover:text-primary">' +
           d.title +
           "</a>" +
-          '<p class="mt-1 text-sm text-base-content/95">' +
+          '<p class="mt-1 text-base text-base-content/95">' +
           (d.excerpt || "") +
           "</p>" +
-          '<p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-base-content/95">' +
+          '<p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm text-base-content/95">' +
           (d.orphaCode ? "<span>" + d.orphaCode + "</span>" : "") +
           (d.system ? "<span>" + d.system + "</span>" : "") +
           (d.inheritance ? "<span>" + d.inheritance + "</span>" : "") +
@@ -493,7 +537,7 @@ const facetGroups = [
 
         if (currentItems.length === 0) {
           resultsList.innerHTML =
-            '<li class="py-8 text-sm text-base-content/95">' +
+            '<li class="py-8 text-base text-base-content/95">' +
             "No matches in this prototype's sample — that reflects what's in the " +
             "current sample, not whether the disease is real. Try a different " +
             "spelling, a related symptom, or fewer filters." +
@@ -509,7 +553,7 @@ const facetGroups = [
         if (remaining > 0) {
           var nextBatch = Math.min(PAGE_SIZE, remaining);
           showMoreContainer.innerHTML =
-            '<button type="button" id="show-more-btn" class="w-full rounded-field border border-base-300 py-2 text-sm text-base-content/95 transition-colors hover:border-primary hover:text-primary">' +
+            '<button type="button" id="show-more-btn" class="w-full rounded-field border border-base-300 py-2 text-base text-base-content/95 transition-colors hover:border-primary hover:text-primary">' +
             "Show " +
             nextBatch +
             " more (" +
