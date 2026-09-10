@@ -58,8 +58,9 @@ const { Content } = await render(entry);
     text-decoration: underline;
   }
 
-  .markdown-body :global(a:hover) {
-    color: #facc15;
+  .markdown-body :global(a:hover),
+  .markdown-body :global(a:focus-visible) {
+    color: var(--color-link-hover);
   }
 
   .markdown-body :global(em) {

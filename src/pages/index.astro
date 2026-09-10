@@ -106,7 +106,7 @@ const facetGroups = [
           href='https://www.orphadata.com/'
           target='_blank'
           rel='noopener'
-          class='mt-1 inline-block text-sm text-primary underline hover:text-yellow-400'
+          class='mt-1 inline-block text-sm text-primary underline hover:text-[var(--color-link-hover)] focus-visible:text-[var(--color-link-hover)]'
         >
           Data via Orphadata
         </a>
@@ -237,7 +237,7 @@ const facetGroups = [
             <li class='py-4'>
               <a
                 href={`/diseases/${d.slug}/`}
-                class='font-display text-xl font-medium hover:text-primary'
+                class='font-display text-xl font-medium hover:text-primary focus-visible:text-primary'
               >
                 {d.name}
               </a>
@@ -536,7 +536,7 @@ const facetGroups = [
           '<li class="py-4">' +
           '<a href="' +
           d.url +
-          '" class="font-display text-xl font-medium hover:text-primary">' +
+          '" class="font-display text-xl font-medium hover:text-primary focus-visible:text-primary">' +
           d.title +
           "</a>" +
           '<p class="mt-1 text-base text-base-content/95">' +
@@ -580,7 +580,7 @@ const facetGroups = [
         if (remaining > 0) {
           var nextBatch = Math.min(PAGE_SIZE, remaining);
           showMoreContainer.innerHTML =
-            '<button type="button" id="show-more-btn" class="w-full rounded-field border border-base-300 py-2 text-base text-base-content/95 transition-colors hover:border-primary hover:text-primary">' +
+            '<button type="button" id="show-more-btn" class="w-full rounded-field border border-base-300 py-2 text-base text-base-content/95 transition-colors hover:border-primary hover:text-primary focus-visible:border-primary focus-visible:text-primary">' +
             "Show " +
             nextBatch +
             " more (" +

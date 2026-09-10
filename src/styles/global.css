@@ -46,6 +46,13 @@
   --border: 1px;
   --depth: 0;
   --noise: 0;
+
+  /* Hover/focus accent for already-primary-colored links (can't just
+     darken toward primary since they're already that color). Tailwind's
+     yellow-400 reads fine on the dark theme's near-black background but
+     is only ~1.4:1 against this theme's warm-white paper — nowhere near
+     AA's 4.5:1 — so the light theme gets a darker amber instead. */
+  --color-link-hover: #92400e;
 }
 
 @plugin "daisyui/theme" {
@@ -89,6 +96,8 @@
   --border: 1px;
   --depth: 0;
   --noise: 0;
+
+  --color-link-hover: #facc15;
 }
 
 @theme {
