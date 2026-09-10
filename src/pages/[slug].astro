@@ -49,6 +49,10 @@ const { Content } = await render(entry);
     list-style-type: disc;
   }
 
+  .markdown-body :global(figure) {
+    margin-top: 1rem;
+  }
+
   .markdown-body :global(li + li) {
     margin-top: 0.25rem;
   }

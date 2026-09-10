@@ -24,7 +24,7 @@ and rest I need. I remain hopeful. If you'd like to learn more about this
 site and how I built it, or if you have any other questions, feel free to
 [contact me](/contact).
 
-<figure class="mt-4 block w-full sm:hidden">
+<figure class="block w-full sm:hidden">
   <img src="/images/danny-englander.jpg" alt="Danny Englander smiling outdoors" class="w-full rounded-xl" />
   <figcaption class="mt-1 text-xs text-base-content/70">Danny Englander, September 2, 2026.</figcaption>
 </figure>
