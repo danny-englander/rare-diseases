@@ -74,4 +74,12 @@ const { class: className } = Astro.props;
       stroke-width="5"
     ></path>
   </g>
+
+  <!-- Layered on top of the punched-through hole: transparent in dark
+       theme (leaves the hole as-is, which already reads as a pupil
+       against the dark page background) but filled with the ink color
+       in light theme, where an empty hole just blends into the paper
+       background instead of reading as an eye. -->
+  <polygon points="300,428 346,470 300,512 254,470" fill="var(--zebra-eye-fill)"></polygon>
+  <polygon points="500,428 546,470 500,512 454,470" fill="var(--zebra-eye-fill)"></polygon>
 </svg>

@@ -18,11 +18,12 @@ list.
   (axe-core + Playwright) checked in CI
 - About, Privacy Policy, Contact, and Milestones pages
 - A Netlify Forms-backed contact form
+- A modern SVG zebra logo, replacing the original hexagon mark
 
 ## Planned
 
 - **Expand disease coverage toward the full Orphadata catalogue.** The
-  site currently covers a sample of 920 of the real 10,101 diseases in
+  site currently covers a sample of 921 of the real 10,101 diseases in
   Orphadata's dataset.
 - **Broader body-system coverage** by pulling in more classifications
   than the current sample covers.
@@ -31,6 +32,5 @@ list.
 - **Symptom (phenotype) filtering** as an additional search facet.
 - **Live GitHub Issues integration for this page**, so it reflects real
   open work automatically instead of this static list.
-- **A modern SVG zebra logo**, replacing the current hexagon mark.
 
 Have an idea, or want to see something added? [Get in touch](/contact/).

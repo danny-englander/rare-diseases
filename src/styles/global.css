@@ -53,6 +53,12 @@
      is only ~1.4:1 against this theme's warm-white paper — nowhere near
      AA's 4.5:1 — so the light theme gets a darker amber instead. */
   --color-link-hover: #92400e;
+
+  /* ZebraLogo's eyes: a punched-through hole reads fine in dark theme
+     (shows the dark page background, already looking like a pupil) but
+     just blends into the light paper background here, so fill them
+     solid with the ink color instead. */
+  --zebra-eye-fill: currentColor;
 }
 
 @plugin "daisyui/theme" {
@@ -98,6 +104,8 @@
   --noise: 0;
 
   --color-link-hover: #facc15;
+
+  --zebra-eye-fill: transparent;
 }
 
 @theme {
