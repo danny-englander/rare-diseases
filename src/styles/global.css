@@ -113,6 +113,12 @@ html {
   font-family: var(--font-serif);
 }
 
+@layer base {
+  footer p {
+    @apply !mb-6;
+  }
+}
+
 /* Off-canvas panels (filter drawer, nav menu): both are a plain <dialog>
    whose [open] attribute stays true for the whole slide-out close
    animation — the matching inline script only calls .close() once the
