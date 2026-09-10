@@ -12,14 +12,12 @@ description: What the Rare Zebra prototype is, and what it isn't.
 
 I'm Danny Englander. I was recently diagnosed with two rare diseases,
 [myasthenia gravis](/diseases/myasthenia-gravis/) and
-[rippling muscle disease](/diseases/rippling-muscle-disease/), and I'm
-also dealing with unexplained neuropathy in my feet, toes, glutes,
-fingers, and hands.
-Building this site has been a way to stay productive while I adjust to
-all of that.
+[rippling muscle disease](/diseases/rippling-muscle-disease/). I'm
+also experiencing as of yet unexplained neuropathy in my feet, toes, glutes,
+fingers, and hands as well as extreme pain. Diabetes, metabolic, and vitamin deficiencies have all been ruled out as well as a negative CASPR2 test and a negative Sjögren's test. Upcoming is a chest CT with contrast and a second EMG. I am also hoping for a lip biopsy and a skin punch biopsy but of course one step at a time. 🙂
 
-I built this application with Claude Code, often from my phone without
-typing a word, using Wispr Flow for dictation connected to Claude Desktop
+I built this application with Claude AI and Claude Code, often from my phone without
+typing a word, using Wispr Flow AI for dictation connected to Claude Desktop
 and my local development environment. It still amazes me that, in this
 age of AI, I can build something like this while also getting the care
 and rest I need. I remain hopeful. If you'd like to learn more about this
