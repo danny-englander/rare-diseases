@@ -5,7 +5,7 @@ description: What's shipped in Rare Zebra, and what's planned next.
 
 This page tracks where the project stands and what's coming next. It's a
 static list for now; the plan is to wire it up to this project's
-[GitHub Issues](https://github.com/danny-englander/rare-diseases/issues)
+[GitHub Issues](https://github.com/danny-englander/rare-zebra/issues)
 so it reflects real, open work automatically instead of a hand-maintained
 list.
 

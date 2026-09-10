@@ -15,7 +15,7 @@ function git(command: string): string {
   }
 }
 
-export const repoUrl = "https://github.com/danny-englander/rare-diseases";
+export const repoUrl = "https://github.com/danny-englander/rare-zebra";
 
 const sha = git("git rev-parse HEAD") || process.env.COMMIT_REF || "";
 

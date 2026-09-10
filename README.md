@@ -1,6 +1,6 @@
 # Rare Zebra (prototype)
 
-[![CI](https://github.com/danny-englander/rare-diseases/actions/workflows/ci.yml/badge.svg)](https://github.com/danny-englander/rare-diseases/actions/workflows/ci.yml)
+[![CI](https://github.com/danny-englander/rare-zebra/actions/workflows/ci.yml/badge.svg)](https://github.com/danny-englander/rare-zebra/actions/workflows/ci.yml)
 
 A fast, static search tool for rare diseases — Astro + Tailwind 4 + daisyUI +
 Pagefind, with real-time faceted filtering, real data from Orphadata, and no
