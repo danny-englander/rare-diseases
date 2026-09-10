@@ -61,6 +61,15 @@ muscle disease with myasthenia gravis (206575), Myasthenia gravis (589), and
 Adult-onset cervical dystonia, DYT23 type (420492). Add more codes there as
 needed.
 
+**Pinning a disease from outside the 5 classifications.** `PINNED_CODES`
+only rescues a disease that's already inside one of the 5 fetched
+classification files. A disease that lives under a different Orphanet
+specialty entirely (e.g. Primary Sjögren disease, ORPHA:289390, under "Rare
+systemic or rheumatologic disease") needs `EXTRA_PINNED_CODES` instead,
+which resolves the disease's name and real canonical specialty from
+`en_product7.xml` ("linearisation") rather than fetching that whole
+otherwise-unused classification for one disease.
+
 To refresh the dataset (Orphadata itself only updates twice a year, so this
 doesn't need to run often):
 

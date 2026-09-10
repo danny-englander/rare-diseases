@@ -62,6 +62,18 @@ const PINNED_CODES = new Set([
   "420492", // Adult-onset cervical dystonia, DYT23 type
 ]);
 
+// ORPHAcodes pinned in from OUTSIDE the 5 classifications above — PINNED_CODES
+// only rescues a disease that's already inside one of those files from being
+// cut by the per-classification cap. These live under a different Orphanet
+// specialty branch entirely, so their name + system come from product7
+// ("linearisation", see README's "Next steps to consider"), which assigns
+// every one of Orphadata's 10,101 diseases to exactly one canonical
+// specialty, instead of fetching that whole (otherwise unused) classification
+// just for one disease.
+const EXTRA_PINNED_CODES = new Set([
+  "289390", // Primary Sjögren disease (Rare systemic or rheumatologic disease)
+]);
+
 const BASE = "https://www.orphadata.com/data";
 
 const parser = new XMLParser({
@@ -179,6 +191,39 @@ async function loadClassification({ id, system }) {
 
   const combined = [...pinned, ...sampled.filter((d) => !pinnedCodes.has(d.code))];
   return combined.map((d) => ({ ...d, system }));
+}
+
+// --- product7.xml ("linearisation"): name + canonical specialty for
+// EXTRA_PINNED_CODES diseases, which live outside the 5 classifications
+// fetched above ---
+
+async function loadExtraPinnedDisorders() {
+  if (EXTRA_PINNED_CODES.size === 0) return [];
+
+  const filePath = await downloadToCache(`${BASE}/xml/en_product7.xml`, "en_product7.xml");
+  const xml = await readFile(filePath, "utf-8");
+  const data = parser.parse(xml);
+  const disorders = data.JDBOR.DisorderList.Disorder;
+
+  const result = [];
+  for (const d of disorders) {
+    const code = String(d.OrphaCode);
+    if (!EXTRA_PINNED_CODES.has(code)) continue;
+
+    const associations = d.DisorderDisorderAssociationList?.DisorderDisorderAssociation;
+    const association = Array.isArray(associations) ? associations[0] : associations;
+    const system =
+      association?.TargetDisorder?.Name?.["#text"] ??
+      association?.TargetDisorder?.Name ??
+      "Uncategorized";
+
+    result.push({
+      code,
+      name: d.Name?.["#text"] ?? d.Name,
+      system,
+    });
+  }
+  return result;
 }
 
 // --- product1 (JSON): synonyms, keyed by OrphaCode ---
@@ -331,6 +376,9 @@ async function main() {
   console.log("Fetching classification files...");
   const classificationResults = await Promise.all(CLASSIFICATIONS.map(loadClassification));
 
+  console.log("Fetching extra pinned disorders outside the 5 classifications (product7)...");
+  const extraPinned = await loadExtraPinnedDisorders();
+
   console.log("Fetching synonyms (product1)...");
   const synonymsByCode = await loadSynonyms();
 
@@ -345,7 +393,7 @@ async function main() {
   const seen = new Set();
   const usedSlugs = new Set();
   const merged = [];
-  for (const list of classificationResults) {
+  for (const list of [...classificationResults, extraPinned]) {
     for (const { code, name, system } of list) {
       if (seen.has(code)) continue;
       seen.add(code);

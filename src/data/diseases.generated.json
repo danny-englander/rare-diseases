@@ -22682,6 +22682,33 @@
         "Abnormal blistering of the skin",
         "Erythema"
       ]
+    },
+    {
+      "slug": "primary-sjogren-disease",
+      "name": "Primary Sjögren disease",
+      "synonyms": [
+        "Primary SjD",
+        "Primary Sjögren syndrome"
+      ],
+      "orphaCode": "ORPHA:289390",
+      "system": "Rare systemic or rheumatologic disease",
+      "inheritance": [
+        "Not applicable"
+      ],
+      "ageOfOnset": [
+        "Adult"
+      ],
+      "prevalence": "1-5 / 10 000 (France)",
+      "rarity": "1-5 / 10 000",
+      "note": "ORPHA:289390 is classified under \"Rare systemic or rheumatologic disease\" in the Orphanet nomenclature.",
+      "symptoms": [
+        "Xerostomia",
+        "Keratoconjunctivitis sicca",
+        "Abnormality of the kidney",
+        "Abnormality of the nervous system",
+        "Anxiety",
+        "Abnormality of the skin"
+      ]
     }
   ]
 }
