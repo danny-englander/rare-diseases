@@ -378,14 +378,18 @@ const facetGroups = [
 
       function openFilterDialog() {
         filterDialog.showModal();
-        // Force a synchronous layout flush so the browser has committed
-        // the panel's off-screen position (set via showModal) before the
-        // "open" class flips the transform. Double rAF used to do this
-        // job but isn't reliable on every browser right after
-        // showModal() — when it gets skipped, the panel just appears
-        // already open instead of sliding in.
+        // Force a synchronous layout flush so the panel's off-screen
+        // position (set via showModal) is committed, then wait one
+        // animation frame so the browser actually paints that position
+        // before the "open" class flips the transform. Layout alone
+        // doesn't guarantee a paint happened — without the extra frame,
+        // the backdrop fades in smoothly (its own composited layer) while
+        // the panel's transform skips straight to its final value with no
+        // visible slide, which looks like the two are out of sync.
         void filterDialog.offsetHeight;
-        filterDialog.classList.add("is-open");
+        requestAnimationFrame(() => {
+          filterDialog.classList.add("is-open");
+        });
       }
 
       function closeFilterDialog() {
