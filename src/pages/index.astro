@@ -52,9 +52,8 @@ const FACET_COLORS = {
   },
 } as const;
 
-// Drives the nested collapse groups inside the filter panel. The first
-// two (most commonly filtered) start expanded; the rest start collapsed
-// so the panel doesn't open to a wall of facets.
+// Drives the nested collapse groups inside the filter panel. All four
+// start expanded.
 const facetGroups = [
   {
     key: "System",
@@ -77,7 +76,7 @@ const facetGroups = [
     key: "AgeOfOnset",
     legend: "Typical age of onset",
     options: ageOfOnsetOptions,
-    defaultOpen: false,
+    defaultOpen: true,
     color: "accent" as const,
     count: (v: string) =>
       diseases.filter((d) => d.ageOfOnset.includes(v)).length,
@@ -86,7 +85,7 @@ const facetGroups = [
     key: "Rarity",
     legend: "Rarity",
     options: rarityOptions,
-    defaultOpen: false,
+    defaultOpen: true,
     color: "info" as const,
     count: (v: string) => diseases.filter((d) => d.rarity === v).length,
   },
