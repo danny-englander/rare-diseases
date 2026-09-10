@@ -93,7 +93,7 @@ const facetGroups = [
 ];
 ---
 
-<Layout title='Rare Zebra — Search'>
+<Layout title='Rare Zebra: Search'>
   <main class='mx-auto max-w-5xl px-4 py-8 sm:px-6'>
     <div class='flex items-start justify-between gap-4'>
       <div class='flex-1'>
@@ -124,7 +124,7 @@ const facetGroups = [
       <div class='collapse-content'>
         <p class='text-base text-base-content/95'>
           This is a working prototype built by Danny Englander, not a
-          comprehensive database — it currently covers a sample of {
+          comprehensive database. It currently covers a sample of {
             diseases.length
           } of Orphadata's {ORPHADATA_TOTAL.toLocaleString()} catalogued rare diseases.
           Not finding something here doesn't mean it isn't real or rare. If
@@ -149,7 +149,7 @@ const facetGroups = [
       <div class='collapse-content'>
         <ul class='list-disc space-y-1 pl-5 text-base text-base-content/95'>
           <li>
-            As you type, results filter instantly — matching against each
+            As you type, results filter instantly, matching against each
             disease's name, synonyms, and symptoms.
           </li>
           <li>
@@ -158,7 +158,7 @@ const facetGroups = [
             combine with your search text and with each other.
           </li>
           <li>
-            Active filters show up as removable chips above the results —
+            Active filters show up as removable chips above the results;
             click a chip's × to drop just that one.
           </li>
           <li>
@@ -166,7 +166,7 @@ const facetGroups = [
             box and every filter at once.
           </li>
           <li>
-            Results load 20 at a time — use{" "}
+            Results load 20 at a time; use{" "}
             <span class='font-medium'>Show more</span> to keep going.
           </li>
         </ul>
@@ -571,7 +571,7 @@ const facetGroups = [
         if (currentItems.length === 0) {
           resultsList.innerHTML =
             '<li class="py-8 text-base text-base-content/95">' +
-            "No matches in this prototype's sample — that reflects what's in the " +
+            "No matches in this prototype's sample. That reflects what's in the " +
             "current sample, not whether the disease is real. Try a different " +
             "spelling, a related symptom, or fewer filters." +
             "</li>";
