@@ -31,6 +31,16 @@ site and how I built it, or if you have any other questions, feel free to
 
 <div style="clear: both;"></div>
 
+## Why "Rare Zebra"?
+
+Doctors are trained on a saying: "When you hear hoofbeats, think of horses,
+not zebras." It's a reminder to consider the common explanation first,
+since common conditions are common. But sometimes the hoofbeats really do
+belong to a zebra, and the rare disease community has adopted the zebra
+as its symbol for exactly that reason. If you have a rare disease, you're
+the zebra: the diagnosis that took longer to reach, if it's been reached
+at all. That's where this site's name comes from.
+
 ## What this is
 
 Rare Zebra is a prototype search interface for looking up rare
