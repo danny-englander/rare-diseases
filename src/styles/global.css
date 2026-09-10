@@ -132,6 +132,19 @@ html {
   }
 }
 
+/* Shared style for a form field: primary-colored border, switching to
+   --color-link-hover on focus. Pair with daisyUI's input-bordered /
+   textarea-bordered / select-bordered so only the border color is
+   overridden. */
+@utility field-accent {
+  border-color: var(--color-primary);
+
+  &:focus {
+    border-color: var(--color-link-hover);
+    outline: none;
+  }
+}
+
 /* Off-canvas panels (filter drawer, nav menu): both are a plain <dialog>
    whose [open] attribute stays true for the whole slide-out close
    animation — the matching inline script only calls .close() once the
