@@ -32,4 +32,4 @@ list.
 - **Live GitHub Issues integration for this page**, so it reflects real
   open work automatically instead of this static list.
 
-Have an idea, or want to see something added? [Get in touch](/contact).
+Have an idea, or want to see something added? [Get in touch](/contact/).

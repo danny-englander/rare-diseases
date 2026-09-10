@@ -14,7 +14,7 @@ site stores about you is your light/dark theme preference, saved in your
 browser's `localStorage` so it doesn't need to ask again on your next
 visit. That preference never leaves your device.
 
-If you use the [contact form](/contact), we receive whatever you enter:
+If you use the [contact form](/contact/), we receive whatever you enter:
 your name, email address, and message content, so we can respond to you.
 
 ## How we use information
@@ -38,6 +38,6 @@ site.
 ## Contact
 
 If you have questions about this policy, please use the
-[contact form](/contact).
+[contact form](/contact/).
 
 *Last updated: September 2026.*

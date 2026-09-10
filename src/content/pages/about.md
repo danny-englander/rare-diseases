@@ -22,7 +22,7 @@ and my local development environment. It still amazes me that, in this
 age of AI, I can build something like this while also getting the care
 and rest I need. I remain hopeful. If you'd like to learn more about this
 site and how I built it, or if you have any other questions, feel free to
-[contact me](/contact).
+[contact me](/contact/).
 
 <figure class="block w-full sm:hidden">
   <img src="/images/danny-englander.jpg" alt="Danny Englander smiling outdoors" class="w-full rounded-xl" />
@@ -60,4 +60,4 @@ qualified healthcare provider or a patient organization for that condition.
 
 ## Questions or feedback
 
-Use the [contact page](/contact) to get in touch.
+Use the [contact page](/contact/) to get in touch.
