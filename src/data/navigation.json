@@ -1,0 +1,23 @@
+[
+  { "label": "Home", "href": "/", "icon": "material-symbols:home-outline" },
+  {
+    "label": "About",
+    "href": "/about/",
+    "icon": "material-symbols:info-outline"
+  },
+  {
+    "label": "Milestones",
+    "href": "/milestones/",
+    "icon": "material-symbols:flag-outline"
+  },
+  {
+    "label": "Contact",
+    "href": "/contact/",
+    "icon": "material-symbols:mail-outline"
+  },
+  {
+    "label": "Privacy Policy",
+    "href": "/privacy-policy/",
+    "icon": "material-symbols:privacy-tip-outline"
+  }
+]
