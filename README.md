@@ -1,4 +1,4 @@
-# Rare Disease Index (prototype)
+# Rare Zebra (prototype)
 
 [![CI](https://github.com/danny-englander/rare-diseases/actions/workflows/ci.yml/badge.svg)](https://github.com/danny-englander/rare-diseases/actions/workflows/ci.yml)
 

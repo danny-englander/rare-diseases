@@ -2,19 +2,14 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title='Contact' description='Get in touch about the Rare Disease Index prototype.'>
+<Layout title='Contact' description='Get in touch about the Rare Zebra prototype.'>
   <main class='mx-auto max-w-5xl px-4 py-8 sm:px-6'>
     <h1 class='font-display text-3xl font-semibold tracking-tight sm:text-4xl'>
       Contact
     </h1>
     <p class='mt-1 text-base text-base-content/95'>
       Questions, feedback, or spotted something wrong in the data? Send a
-      message below, or email{" "}
-      <a
-        href='mailto:dannyenglander311@gmail.com'
-        class='text-primary underline hover:text-yellow-400'
-        >dannyenglander311@gmail.com</a
-      > directly.
+      message below.
     </p>
 
     <div id='contact-form-wrap' class='mt-8 max-w-md'>
@@ -116,7 +111,7 @@ import Layout from "../layouts/Layout.astro";
         }
         if (formMessage) {
           formMessage.textContent =
-            "Message sent — thank you, I'll get back to you soon.";
+            "Message sent, thank you. I'll get back to you soon.";
         }
       })
       .catch((error) => alert(error));

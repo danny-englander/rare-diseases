@@ -1,14 +1,14 @@
 ---
 title: Privacy Policy
-description: How the Rare Disease Index prototype handles information collected on this site.
+description: How the Rare Zebra prototype handles information collected on this site.
 ---
 
-This Privacy Policy describes how the Rare Disease Index ("we", "us", or
+This Privacy Policy describes how Rare Zebra ("we", "us", or
 "our") handles information when you visit this site.
 
 ## Information we collect
 
-This site is a static prototype — there are no user accounts, and disease
+This site is a static prototype: there are no user accounts, and disease
 search and filtering happen entirely in your browser. The only thing this
 site stores about you is your light/dark theme preference, saved in your
 browser's `localStorage` so it doesn't need to ask again on your next

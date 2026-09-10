@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import Logo from "../components/Logo.astro";
 import MainNav from "../components/MainNav.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
 import { dataVersion } from "../data/diseases";
 
 interface Props {
@@ -49,12 +50,15 @@ const {
             <Logo
               class='h-[30px] w-[30px] text-primary md:h-[50px] md:w-[50px]'
             />
-            Rare Disease Index
+            Rare Zebra
           </a>
-          <MainNav />
+          <div class='flex items-center gap-1'>
+            <ThemeToggle />
+            <MainNav />
+          </div>
         </div>
         <p class='mt-1 pb-3 text-sm text-base-content/80'>
-          A prototype search interface built on Orphanet data
+          Rare disease search prototype built on Orphanet data
         </p>
       </div>
     </header>

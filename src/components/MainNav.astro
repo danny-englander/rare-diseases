@@ -2,10 +2,14 @@
 import { Icon } from "astro-icon/components";
 
 const navItems = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Home", href: "/", icon: "material-symbols:home-outline" },
+  { label: "About", href: "/about", icon: "material-symbols:info-outline" },
+  { label: "Contact", href: "/contact", icon: "material-symbols:mail-outline" },
+  {
+    label: "Privacy Policy",
+    href: "/privacy-policy",
+    icon: "material-symbols:privacy-tip-outline",
+  },
 ];
 ---
 
@@ -25,7 +29,7 @@ const navItems = [
   class='m-0 h-dvh max-h-none w-dvw max-w-none items-start justify-end border-0 bg-transparent p-0'
 >
   <div
-    class='nav-panel flex h-full w-full max-w-xs flex-col bg-base-100 shadow-xl'
+    class='nav-panel flex h-full w-full max-w-sm flex-col bg-base-100 shadow-xl'
   >
     <div class='flex shrink-0 items-center justify-between border-b border-base-300 p-4'>
       <span class='font-display text-xl font-semibold'>Menu</span>
@@ -39,12 +43,21 @@ const navItems = [
       </button>
     </div>
 
-    <nav class='flex-1 overflow-y-auto p-2' aria-label='Main'>
-      <ul class='menu w-full text-base'>
+    <nav class='flex-1 overflow-y-auto' aria-label='Main'>
+      <ul class='w-full text-lg'>
         {
           navItems.map((item) => (
-            <li>
-              <a href={item.href}>{item.label}</a>
+            <li class='border-b border-base-300 last:border-b-0'>
+              <a
+                href={item.href}
+                class='flex items-center gap-3 px-4 py-3 hover:bg-base-200 hover:text-primary'
+              >
+                <Icon
+                  name={item.icon}
+                  class='h-5 w-5 shrink-0 text-base-content/70'
+                />
+                <span>{item.label}</span>
+              </a>
             </li>
           ))
         }
