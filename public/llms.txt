@@ -1,0 +1,18 @@
+# Rare Zebra
+
+> A prototype search interface for looking up rare diseases, built on real data from Orphadata (Orphanet's free, open-access data service). Covers a sample of 921 of the 10,101 real diseases in Orphadata's catalogue — not the full set, and not a finished product. Not affiliated with or endorsed by Orphanet, and not a substitute for medical advice.
+
+Built by Danny Englander with Astro, Tailwind CSS, daisyUI, and Pagefind for instant client-side search — no backend. Individual disease pages aren't listed below (there are hundreds); see /sitemap-index.xml for the full list of URLs.
+
+## Pages
+
+- [Home](https://www.rarezebra.org/): Faceted search by disease name, synonym, symptom, body system, inheritance pattern, age of onset, or rarity
+- [About](https://www.rarezebra.org/about/): Who built this, why, and what "Rare Zebra" means
+- [Milestones](https://www.rarezebra.org/milestones/): What's shipped and what's planned next
+- [Contact](https://www.rarezebra.org/contact/): Contact form
+- [Privacy Policy](https://www.rarezebra.org/privacy-policy/): What data this site does (and doesn't) collect
+
+## Optional
+
+- [GitHub repository](https://github.com/danny-englander/rare-zebra): Source code
+- [Orphadata](https://www.orphadata.com/): The free, open-access data service this site's dataset comes from
