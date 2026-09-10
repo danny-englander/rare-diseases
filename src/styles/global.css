@@ -132,15 +132,15 @@ html {
   }
 }
 
-/* Shared style for a form field: primary-colored border, switching to
-   --color-link-hover on focus. Pair with daisyUI's input-bordered /
-   textarea-bordered / select-bordered so only the border color is
-   overridden. */
+/* Shared style for a form field: amber border by default, switching to
+   primary green on focus. Pair with daisyUI's input-bordered /
+   textarea-bordered / select-bordered (or btn-outline) so only the
+   border color is overridden. */
 @utility field-accent {
-  border-color: var(--color-primary);
+  border-color: var(--color-link-hover);
 
   &:focus {
-    border-color: var(--color-link-hover);
+    border-color: var(--color-primary);
     outline: none;
   }
 }
