@@ -22,49 +22,56 @@ const { class: className } = Astro.props;
         d="M 250,300 L 230,430 L 250,560 L 300,700 L 330,790 L 350,860 L 400,882 L 450,860 L 470,790 L 500,700 L 550,560 L 570,430 L 550,300 L 400,255 Z"
       ></path>
     </clipPath>
+    <!-- True cutouts for the eyes (white = visible, black = punched
+         through to whatever sits behind the whole mark), rather than
+         filling them with the theme's background color — a fill would
+         go stale the moment the logo sits on a surface other than
+         base-100 (a hover state, a future colored background, etc). -->
+    <mask id="zh-eyes">
+      <rect x="120" y="60" width="560" height="880" fill="white"></rect>
+      <polygon points="300,428 346,470 300,512 254,470" fill="black"></polygon>
+      <polygon points="500,428 546,470 500,512 454,470" fill="black"></polygon>
+    </mask>
   </defs>
 
-  <polygon points="260,320 206,170 354,266" fill="currentColor"></polygon>
-  <polygon points="284,298 248,208 326,260" fill="var(--color-base-100)"></polygon>
-  <polygon points="540,320 594,170 446,266" fill="currentColor"></polygon>
-  <polygon points="516,298 552,208 474,260" fill="var(--color-base-100)"></polygon>
+  <g mask="url(#zh-eyes)">
+    <polygon points="260,320 206,170 354,266" fill="currentColor"></polygon>
+    <polygon points="284,298 248,208 326,260" fill="var(--color-base-100)"></polygon>
+    <polygon points="540,320 594,170 446,266" fill="currentColor"></polygon>
+    <polygon points="516,298 552,208 474,260" fill="var(--color-base-100)"></polygon>
 
-  <polygon
-    points="250,300 286,208 320,286 356,178 392,268 428,168 462,262 498,190 530,282 550,300 400,255"
-    fill="currentColor"
-  ></polygon>
+    <polygon
+      points="250,300 286,208 320,286 356,178 392,268 428,168 462,262 498,190 530,282 550,300 400,255"
+      fill="currentColor"
+    ></polygon>
 
-  <g clip-path="url(#zh-head)">
+    <g clip-path="url(#zh-head)">
+      <path
+        d="M 250,300 L 230,430 L 250,560 L 300,700 L 330,790 L 350,860 L 400,882 L 450,860 L 470,790 L 500,700 L 550,560 L 570,430 L 550,300 L 400,255 Z"
+        fill="var(--color-base-100)"
+      ></path>
+      <polygon points="400,1150 427.2,-149.7 472.6,-148.0" fill="currentColor"></polygon>
+      <polygon points="400,1150 499.7,-146.2 544.9,-141.9" fill="currentColor"></polygon>
+      <polygon points="400,1150 571.9,-138.6 616.8,-131.8" fill="currentColor"></polygon>
+      <polygon points="400,1150 643.6,-127.0 688.0,-117.7" fill="currentColor"></polygon>
+      <polygon points="400,1150 372.8,-149.7 327.4,-148.0" fill="currentColor"></polygon>
+      <polygon points="400,1150 300.3,-146.2 255.1,-141.9" fill="currentColor"></polygon>
+      <polygon points="400,1150 228.1,-138.6 183.2,-131.8" fill="currentColor"></polygon>
+      <polygon points="400,1150 156.4,-127.0 112.0,-117.7" fill="currentColor"></polygon>
+      <polygon points="200,640 400,590 600,640 600,770 200,770" fill="var(--color-base-100)"></polygon>
+      <polygon points="200,654 400,604 600,654 600,680 400,630 200,680" fill="currentColor"></polygon>
+      <polygon points="200,706 400,656 600,706 600,732 400,682 200,732" fill="currentColor"></polygon>
+    </g>
+
+    <polygon points="326,746 474,746 470,800 450,858 400,882 350,858 330,800" fill="currentColor"></polygon>
+    <polygon points="365,818 392,810 396,832 369,840" fill="var(--color-base-100)"></polygon>
+    <polygon points="435,818 408,810 404,832 431,840" fill="var(--color-base-100)"></polygon>
+
     <path
       d="M 250,300 L 230,430 L 250,560 L 300,700 L 330,790 L 350,860 L 400,882 L 450,860 L 470,790 L 500,700 L 550,560 L 570,430 L 550,300 L 400,255 Z"
-      fill="var(--color-base-100)"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="5"
     ></path>
-    <polygon points="400,1150 427.2,-149.7 472.6,-148.0" fill="currentColor"></polygon>
-    <polygon points="400,1150 499.7,-146.2 544.9,-141.9" fill="currentColor"></polygon>
-    <polygon points="400,1150 571.9,-138.6 616.8,-131.8" fill="currentColor"></polygon>
-    <polygon points="400,1150 643.6,-127.0 688.0,-117.7" fill="currentColor"></polygon>
-    <polygon points="400,1150 372.8,-149.7 327.4,-148.0" fill="currentColor"></polygon>
-    <polygon points="400,1150 300.3,-146.2 255.1,-141.9" fill="currentColor"></polygon>
-    <polygon points="400,1150 228.1,-138.6 183.2,-131.8" fill="currentColor"></polygon>
-    <polygon points="400,1150 156.4,-127.0 112.0,-117.7" fill="currentColor"></polygon>
-    <polygon points="200,640 400,590 600,640 600,770 200,770" fill="var(--color-base-100)"></polygon>
-    <polygon points="200,654 400,604 600,654 600,680 400,630 200,680" fill="currentColor"></polygon>
-    <polygon points="200,706 400,656 600,706 600,732 400,682 200,732" fill="currentColor"></polygon>
   </g>
-
-  <polygon points="326,746 474,746 470,800 450,858 400,882 350,858 330,800" fill="currentColor"></polygon>
-  <polygon points="365,818 392,810 396,832 369,840" fill="var(--color-base-100)"></polygon>
-  <polygon points="435,818 408,810 404,832 431,840" fill="var(--color-base-100)"></polygon>
-
-  <polygon points="300,428 346,470 300,512 254,470" fill="var(--color-base-100)"></polygon>
-  <polygon points="300,442 332,470 300,498 268,470" fill="currentColor"></polygon>
-  <polygon points="500,428 546,470 500,512 454,470" fill="var(--color-base-100)"></polygon>
-  <polygon points="500,442 532,470 500,498 468,470" fill="currentColor"></polygon>
-
-  <path
-    d="M 250,300 L 230,430 L 250,560 L 300,700 L 330,790 L 350,860 L 400,882 L 450,860 L 470,790 L 500,700 L 550,560 L 570,430 L 550,300 L 400,255 Z"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="5"
-  ></path>
 </svg>
