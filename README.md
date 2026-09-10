@@ -16,6 +16,8 @@ backend.
   instant search + facet counts (no Choices.js, no PagefindUI widget)
 - **theme-change** — small helper for the dark mode toggle, persists to
   `localStorage`
+- **@astrojs/sitemap** — generates `sitemap-index.xml`/`sitemap-0.xml` from
+  every static route at build time; `public/robots.txt` points crawlers at it
 
 ## The data is real
 
