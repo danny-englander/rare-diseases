@@ -31,5 +31,6 @@ list.
 - **Symptom (phenotype) filtering** as an additional search facet.
 - **Live GitHub Issues integration for this page**, so it reflects real
   open work automatically instead of this static list.
+- **A modern SVG zebra logo**, replacing the current hexagon mark.
 
 Have an idea, or want to see something added? [Get in touch](/contact/).
