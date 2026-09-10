@@ -119,6 +119,19 @@ html {
   }
 }
 
+/* Shared style for an inline text link: primary-colored and underlined by
+   default, switching to --color-link-hover (not primary again, since the
+   text is already that color) on hover and keyboard focus alike. */
+@utility inline-link {
+  color: var(--color-primary);
+  text-decoration: underline;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-link-hover);
+  }
+}
+
 /* Off-canvas panels (filter drawer, nav menu): both are a plain <dialog>
    whose [open] attribute stays true for the whole slide-out close
    animation — the matching inline script only calls .close() once the
