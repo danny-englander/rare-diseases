@@ -379,15 +379,14 @@ const facetGroups = [
 
       function openFilterDialog() {
         filterDialog.showModal();
-        // Two rAFs guarantee the browser has painted the panel in its
-        // off-screen position (set via showModal) before the "open" class
-        // flips the transform — without this the slide-in transition
-        // sometimes gets skipped and it just appears already open.
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            filterDialog.classList.add("is-open");
-          });
-        });
+        // Force a synchronous layout flush so the browser has committed
+        // the panel's off-screen position (set via showModal) before the
+        // "open" class flips the transform. Double rAF used to do this
+        // job but isn't reliable on every browser right after
+        // showModal() — when it gets skipped, the panel just appears
+        // already open instead of sliding in.
+        void filterDialog.offsetHeight;
+        filterDialog.classList.add("is-open");
       }
 
       function closeFilterDialog() {
