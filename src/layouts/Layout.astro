@@ -121,12 +121,12 @@ const ogImageURL = new URL("/og-image.png", Astro.site);
                   href='https://www.orphadata.com/'
                   target='_blank'
                   rel='noopener'
-                  class='underline hover:text-primary focus-visible:text-primary'>https://www.orphadata.com</a
+                  class='text-primary underline hover:text-[var(--color-link-hover)] focus-visible:text-[var(--color-link-hover)]'>https://www.orphadata.com</a
                 >. Data release {dataVersion}. Licensed <a
                   href='https://creativecommons.org/licenses/by/4.0/'
                   target='_blank'
                   rel='noopener'
-                  class='underline hover:text-primary focus-visible:text-primary'>CC BY 4.0</a
+                  class='text-primary underline hover:text-[var(--color-link-hover)] focus-visible:text-[var(--color-link-hover)]'>CC BY 4.0</a
                 >. This site's code is a separate, independently built
                 interface over that data, not an Orphanet product.
               </p>
@@ -145,7 +145,7 @@ const ogImageURL = new URL("/og-image.png", Astro.site);
                   <li>
                     <a
                       href={item.href}
-                      class='text-base-content/95 underline hover:text-primary focus-visible:text-primary'
+                      class='text-primary underline hover:text-[var(--color-link-hover)] focus-visible:text-[var(--color-link-hover)]'
                     >
                       {item.label}
                     </a>
@@ -168,7 +168,7 @@ const ogImageURL = new URL("/og-image.png", Astro.site);
                     Latest commit:{" "}
                     <a
                       href={commitUrl}
-                      class='underline hover:text-primary focus-visible:text-primary'
+                      class='text-primary underline hover:text-[var(--color-link-hover)] focus-visible:text-[var(--color-link-hover)]'
                     >
                       {commitShortSha}
                     </a>
@@ -181,7 +181,7 @@ const ogImageURL = new URL("/og-image.png", Astro.site);
                   href={repoUrl}
                   target='_blank'
                   rel='noopener'
-                  class='underline hover:text-primary focus-visible:text-primary'
+                  class='text-primary underline hover:text-[var(--color-link-hover)] focus-visible:text-[var(--color-link-hover)]'
                 >
                   View source on GitHub
                 </a>
@@ -193,7 +193,7 @@ const ogImageURL = new URL("/og-image.png", Astro.site);
                   href='https://astro.build/'
                   target='_blank'
                   rel='noopener'
-                  class='underline hover:text-primary focus-visible:text-primary'>Astro</a
+                  class='text-primary underline hover:text-[var(--color-link-hover)] focus-visible:text-[var(--color-link-hover)]'>Astro</a
                 >
               </li>
               <li>
@@ -201,7 +201,7 @@ const ogImageURL = new URL("/og-image.png", Astro.site);
                   href='https://www.netlify.com/'
                   target='_blank'
                   rel='noopener'
-                  class='underline hover:text-primary focus-visible:text-primary'>Netlify</a
+                  class='text-primary underline hover:text-[var(--color-link-hover)] focus-visible:text-[var(--color-link-hover)]'>Netlify</a
                 >
               </li>
               <li>
@@ -209,7 +209,7 @@ const ogImageURL = new URL("/og-image.png", Astro.site);
                   href='https://pagefind.app/'
                   target='_blank'
                   rel='noopener'
-                  class='underline hover:text-primary focus-visible:text-primary'>Pagefind</a
+                  class='text-primary underline hover:text-[var(--color-link-hover)] focus-visible:text-[var(--color-link-hover)]'>Pagefind</a
                 >
               </li>
             </ul>
